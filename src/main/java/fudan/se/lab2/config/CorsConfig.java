@@ -18,7 +18,7 @@ public class CorsConfig  {
             public void addCorsMappings(CorsRegistry registry) {
                 //TODO: If you encounter some Cross-Domain problems（跨域问题）, Maybe you can do something here.
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost")
+                        .allowedOrigins("http://localhost","http://114.115.160.66")
                         .allowedMethods("*")
                         .allowedHeaders("*");;
             }
