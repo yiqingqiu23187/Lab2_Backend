@@ -6,7 +6,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.HashMap;
@@ -21,24 +20,32 @@ import java.util.Map;
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    ResponseEntity<?> handleUsernameNotFoundException(UsernameNotFoundException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", ex.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> handleUsernameNotFoundException(UsernameNotFoundException ex) {
+        Map<String, Integer> response = new HashMap<>();
+        //response.put("message", ex.getMessage());
+        response.put("code",404);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @ExceptionHandler(UsernameHasBeenRegisteredException.class)
-    ResponseEntity<?> handlerUsernameHasBeenRegisteredException(UsernameHasBeenRegisteredException ex, WebRequest request) {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", ex.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(UNHasBeenRegisteredException.class)
+    public ResponseEntity<?> handlerUsernameHasBeenRegisteredException(UNHasBeenRegisteredException ex) {
+        Map<String, Integer> response = new HashMap<>();
+        //response.put("message", ex.getMessage());
+        response.put("code",400);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    ResponseEntity<?> handleBadCredentialsException(BadCredentialsException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("message", ex.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException ex) {
+        Map<String, Integer> response = new HashMap<>();
+        response.put("code",403);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @ExceptionHandler(ConferHasBeenRegisteredException.class)
+    public ResponseEntity<?> handleConferHasBeenRegisteredException(ConferHasBeenRegisteredException ex) {
+        Map<String, Integer> response = new HashMap<>();
+        response.put("code", 400);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

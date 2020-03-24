@@ -1,6 +1,6 @@
 package fudan.se.lab2.security;
 
-import fudan.se.lab2.security.jwt.JwtRequestFilter;
+import fudan.se.lab2.security.jwt.JwtReFilter;
 import fudan.se.lab2.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +24,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private JwtUserDetailsService userDetailsService;
-    private JwtRequestFilter jwtRequestFilter;
+    private JwtReFilter jwtRequestFilter;
 
     @Autowired
-    public SecurityConfig(JwtUserDetailsService userDetailsService, JwtRequestFilter jwtRequestFilter) {
+    public SecurityConfig(JwtUserDetailsService userDetailsService, JwtReFilter jwtRequestFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtRequestFilter = jwtRequestFilter;
     }
@@ -47,9 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/welcome").permitAll()
+                .antMatchers("/*").permitAll()
                 .anyRequest().authenticated();
-
+       // http.rememberMe();
 //      Here we use JWT(Json Web Token) to authenticate the user.
 //      You need to write your code in the class 'JwtRequestFilter' to make it works.
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

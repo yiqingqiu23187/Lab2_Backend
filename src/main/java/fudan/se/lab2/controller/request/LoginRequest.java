@@ -4,6 +4,7 @@ package fudan.se.lab2.controller.request;
  * @author LBW
  */
 public class LoginRequest {
+
     private String username;
     private String password;
 

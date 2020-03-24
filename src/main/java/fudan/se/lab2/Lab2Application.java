@@ -1,7 +1,6 @@
 package fudan.se.lab2;
 
 import fudan.se.lab2.domain.Authority;
-import fudan.se.lab2.domain.User;
 import fudan.se.lab2.repository.AuthorityRepository;
 import fudan.se.lab2.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -9,9 +8,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Collections;
-import java.util.HashSet;
 
 /**
  * Welcome to 2020 Software Engineering Lab2.
@@ -44,13 +40,13 @@ public class Lab2Application {
 
                 // Create an admin if not exists.
                 if (userRepository.findByUsername("admin") == null) {
-                    User admin = new User(
-                            "admin",
-                            passwordEncoder.encode("password"),
-                            "libowen",
-                            new HashSet<>(Collections.singletonList(adminAuthority))
-                    );
-                    userRepository.save(admin);
+//                    DUser admin = new DUser(
+//                            "admin",
+//                            passwordEncoder.encode("password"),
+//                            "352021",
+//                            new HashSet<>(Collections.singletonList(adminAuthority))
+//                    );
+                   // userRepository.save(admin);
                 }
             }
 

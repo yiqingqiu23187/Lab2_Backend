@@ -9,13 +9,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author LBW
  */
 @Configuration
-public class CorsConfig {
+public class CorsConfig  {
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 //TODO: If you encounter some Cross-Domain problems（跨域问题）, Maybe you can do something here.
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost")
+                        .allowedMethods("*")
+                        .allowedHeaders("*");;
             }
         };
     }

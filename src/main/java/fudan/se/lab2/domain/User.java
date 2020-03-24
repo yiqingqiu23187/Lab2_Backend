@@ -1,11 +1,12 @@
 package fudan.se.lab2.domain;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author LBW
@@ -24,17 +25,24 @@ public class User implements UserDetails {
 
     private String password;
     private String fullname;
+    private String email;
+    private String area;
+    private String unit;
+
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<Authority> authorities = new HashSet<>();
 
 
     public User() {}
-    public User(String username, String password, String fullname, Set<Authority> authorities) {
+    public User(String username, String password, String fullname,String email,String area,
+                 String unit) {
         this.username = username;
         this.password= password;
         this.fullname = fullname;
-        this.authorities = authorities;
+        this.email = email;
+        this.area = area;
+        this.unit = unit;
     }
 
     @Override
@@ -99,4 +107,28 @@ public class User implements UserDetails {
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
 }

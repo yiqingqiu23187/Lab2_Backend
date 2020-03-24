@@ -1,14 +1,20 @@
 package fudan.se.lab2.controller;
 
-import fudan.se.lab2.service.AuthService;
-import fudan.se.lab2.service.JwtUserDetailsService;
+import fudan.se.lab2.controller.request.ConferenceRequest;
 import fudan.se.lab2.controller.request.LoginRequest;
 import fudan.se.lab2.controller.request.RegisterRequest;
+import fudan.se.lab2.domain.Conference;
+import fudan.se.lab2.domain.User;
+import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
+import fudan.se.lab2.exception.ControllerAdvisor;
+import fudan.se.lab2.exception.UNHasBeenRegisteredException;
+import fudan.se.lab2.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -33,15 +39,46 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         logger.debug("RegistrationForm: " + request.toString());
-
-        return ResponseEntity.ok(authService.register(request));
+        User user;
+        try {
+            user = authService.register(request);
+        }catch (UNHasBeenRegisteredException ex){
+            return new ControllerAdvisor().handlerUsernameHasBeenRegisteredException(ex);
+        }
+        HashMap<String, Long> response = new HashMap<>();
+        response.put("id",user.getId());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request){
         logger.debug("LoginForm: " + request.toString());
+        String token;
+        try {
+            token = authService.login(request.getUsername(),request.getPassword());
+        }catch (UsernameNotFoundException ex){
+            return new ControllerAdvisor().handleUsernameNotFoundException(ex);
+        }catch (BadCredentialsException ex){
+            return new ControllerAdvisor().handleBadCredentialsException(ex);
+        }
 
-        return ResponseEntity.ok(authService.login(request.getUsername(), request.getPassword()));
+        HashMap<String, String> response = new HashMap<>();
+        response.put("token",token);
+        System.out.println(response.toString());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/index")
+    public ResponseEntity<?> applyConfer(@RequestBody ConferenceRequest request){
+        logger.debug("ApplyForm: " + request.toString());
+
+        Conference conference;
+        try {
+            conference = authService.applyConfer(request);
+        }catch (ConferHasBeenRegisteredException ex){
+            return new ControllerAdvisor().handleConferHasBeenRegisteredException(ex);
+        }
+        return ResponseEntity.ok(conference);
     }
 
     /**
