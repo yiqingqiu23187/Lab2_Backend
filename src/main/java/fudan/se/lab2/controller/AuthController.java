@@ -1,12 +1,10 @@
 package fudan.se.lab2.controller;
 
-import fudan.se.lab2.controller.request.ApplyConferenceRequest;
-import fudan.se.lab2.controller.request.LoginRequest;
+import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.controller.request.MyConferenceRequest;
-import fudan.se.lab2.controller.request.MyConferenceRequest;
-import fudan.se.lab2.controller.request.RegisterRequest;
 import fudan.se.lab2.controller.response.AllConferenceResponse;
 import fudan.se.lab2.controller.response.LoginResponse;
+import fudan.se.lab2.controller.response.MessageResponse;
 import fudan.se.lab2.controller.response.MyConferenceResponce;
 import fudan.se.lab2.domain.Conference;
 import fudan.se.lab2.domain.User;
@@ -96,11 +94,20 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/myConference")
+    @PostMapping("/myConference")
     public ResponseEntity<?> myConference(@RequestBody MyConferenceRequest request){
         MyConferenceResponce responce = new MyConferenceResponce();
         authService.findMyConference(request.getUsername(),responce);
 
+        return ResponseEntity.ok(responce);
+    }
+
+
+
+    @PostMapping("/message")
+    public ResponseEntity<?> information(@RequestBody MessageRequest request){
+        MessageResponse responce = new MessageResponse();
+        authService.getMessage(request.getUsername(),responce);
         return ResponseEntity.ok(responce);
     }
 
@@ -114,7 +121,6 @@ public class AuthController {
         response.put("message", message);
         return ResponseEntity.ok(response);
     }
-
 }
 
 

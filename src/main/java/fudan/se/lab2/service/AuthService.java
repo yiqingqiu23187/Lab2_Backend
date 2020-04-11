@@ -1,15 +1,19 @@
 package fudan.se.lab2.service;
 
 import fudan.se.lab2.controller.request.ApplyConferenceRequest;
+import fudan.se.lab2.controller.request.MessageRequest;
 import fudan.se.lab2.controller.request.MyConferenceRequest;
 import fudan.se.lab2.controller.request.RegisterRequest;
+import fudan.se.lab2.controller.response.MessageResponse;
 import fudan.se.lab2.controller.response.MyConferenceResponce;
 import fudan.se.lab2.domain.Conference;
+import fudan.se.lab2.domain.Invitation;
 import fudan.se.lab2.domain.User;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
 import fudan.se.lab2.exception.UNHasBeenRegisteredException;
 import fudan.se.lab2.repository.AuthorityRepository;
 import fudan.se.lab2.repository.ConferenceRepository;
+import fudan.se.lab2.repository.InvitationRepository;
 import fudan.se.lab2.repository.UserRepository;
 import fudan.se.lab2.security.jwt.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +31,16 @@ public class AuthService {
     private UserRepository userRepository;
     private AuthorityRepository authorityRepository;
     private ConferenceRepository conferenceRepository;
+    private InvitationRepository invitationRepository;
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     public AuthService(UserRepository userRepository, AuthorityRepository authorityRepository,
-    ConferenceRepository conferenceRepository,JwtTokenUtil jwtTokenUtil) {
+    ConferenceRepository conferenceRepository,InvitationRepository invitationRepository,JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.conferenceRepository = conferenceRepository;
+        this.invitationRepository = invitationRepository;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -91,6 +97,20 @@ public class AuthService {
             if (conference.getPCMembers().contains(username))responce.getPCConference().add(conference);
             if (conference.getAuthor().contains(username))responce.getAuthorConference().add(conference);
         }
+    }
+
+    public void getMessage(String username, MessageResponse response){
+        ArrayList<Invitation> invitations = invitationRepository.findAllByInvitedParty();
+
+        ArrayList<Conference> invitation = new ArrayList<>();
+        ArrayList<Conference> application = conferenceRepository.findAllByChair(username);
+
+        for (Invitation each: invitations){
+            invitation.add(conferenceRepository.findByFullName(each.getConferenceFullname()));
+        }
+
+        response.setInvitation(invitation);
+        response.setApplication(application);
     }
 
 }
