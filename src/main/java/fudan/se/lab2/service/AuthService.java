@@ -1,6 +1,7 @@
 package fudan.se.lab2.service;
 
 import fudan.se.lab2.controller.request.ConferenceRequest;
+import fudan.se.lab2.controller.request.PersonalInformationRequest;
 import fudan.se.lab2.controller.request.RegisterRequest;
 import fudan.se.lab2.domain.Conference;
 import fudan.se.lab2.domain.User;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 /**
  * @author LBW
@@ -44,13 +47,23 @@ public class AuthService {
         return user;
     }
 
-    public String login(String username, String password) throws UsernameNotFoundException, BadCredentialsException {
+    //return user
+    public User login(String username, String password) throws UsernameNotFoundException, BadCredentialsException {
         User user = userRepository.findByUsername(username);
         if (user == null)throw new UsernameNotFoundException(username);
         if (!password.equals(user.getPassword()))throw new BadCredentialsException(username);
 
+        return user;
+    }
+    //return token
+    public String login(String username) throws UsernameNotFoundException, BadCredentialsException {
+        User user = userRepository.findByUsername(username);
+        if (user == null)throw new UsernameNotFoundException(username);
+
         return jwtTokenUtil.generateToken(user);
     }
+
+
     public Conference applyConfer(ConferenceRequest request) throws ConferHasBeenRegisteredException {
         if(conferenceRepository.findByFullName(request.getFullName()) != null)
             throw new ConferHasBeenRegisteredException(request.getFullName());
@@ -60,5 +73,19 @@ public class AuthService {
         conferenceRepository.save(conference);
         return conference;
     }
+
+    public Iterable<Conference> findAllConference(){
+        Iterable<Conference> conferences =  conferenceRepository.findAll();
+        return conferences;
+    }
+
+//    public String personalInformation(String username){
+//        User user = userRepository.findByUsername(username);
+//        if (user == null)throw new UsernameNotFoundException(username);
+//
+//        //Iterable<Conference> conferences = conferenceRepository.findAllById(username);
+//
+//        return jwtTokenUtil.generateToken(user);
+//    }
 
 }

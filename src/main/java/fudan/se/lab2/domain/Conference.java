@@ -16,7 +16,7 @@ public class Conference {
     private String holdPlace;
     private String submissionDeadline;
     private String releaseDate;
-    private int state;//会议状态： 0：待批准 1：审核成功  2：审核失败
+    private int state;//state:0: To be aproved  1:Audit success   2:Audit failure
     public Conference(){}
     public Conference( String abbr, String fullName, String holdDate, String holdPlace, String submissionDeadline,
              String releaseDate,int state){

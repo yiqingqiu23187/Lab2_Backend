@@ -10,7 +10,6 @@ public class RegisterRequest {
     private String email;
     private String area;
     private String unit;
-   // private Set<String> authorities;
 
     public RegisterRequest() {}
 
@@ -18,7 +17,6 @@ public class RegisterRequest {
         this.username = username;
         this.password = password;
         this.fullname = fullname;
-        //this.authorities = authorities;
     }
 
     public String getUsername() {
@@ -68,13 +66,5 @@ public class RegisterRequest {
     public void setUnit(String unit) {
         this.unit = unit;
     }
-
-//    public Set<String> getAuthorities() {
-//        return authorities;
-//    }
-//
-//    public void setAuthorities(Set<String> authorities) {
-//        this.authorities = authorities;
-//    }
 }
 

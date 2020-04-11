@@ -2,7 +2,10 @@ package fudan.se.lab2.controller;
 
 import fudan.se.lab2.controller.request.ConferenceRequest;
 import fudan.se.lab2.controller.request.LoginRequest;
+import fudan.se.lab2.controller.request.PersonalInformationRequest;
 import fudan.se.lab2.controller.request.RegisterRequest;
+import fudan.se.lab2.controller.response.AllConferenceResponse;
+import fudan.se.lab2.controller.response.LoginResponse;
 import fudan.se.lab2.domain.Conference;
 import fudan.se.lab2.domain.User;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
@@ -53,22 +56,24 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){
         logger.debug("LoginForm: " + request.toString());
+        User user;
         String token;
         try {
-            token = authService.login(request.getUsername(),request.getPassword());
+            user = authService.login(request.getUsername(),request.getPassword());
+            token=authService.login(request.getUsername());
         }catch (UsernameNotFoundException ex){
             return new ControllerAdvisor().handleUsernameNotFoundException(ex);
         }catch (BadCredentialsException ex){
             return new ControllerAdvisor().handleBadCredentialsException(ex);
         }
+        LoginResponse response = new LoginResponse();
+        response.setToken(token);
+        response.setUserDetail(user);
 
-        HashMap<String, String> response = new HashMap<>();
-        response.put("token",token);
-        System.out.println(response.toString());
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/index")
+    @PostMapping("/applyConference")
     public ResponseEntity<?> applyConfer(@RequestBody ConferenceRequest request){
         logger.debug("ApplyForm: " + request.toString());
 
@@ -81,8 +86,32 @@ public class AuthController {
         return ResponseEntity.ok(conference);
     }
 
+    @GetMapping("/allConference")
+    public  ResponseEntity<?> allConference(){
+        AllConferenceResponse response = new AllConferenceResponse();
+        Iterable<Conference> conferences = authService.findAllConference();
+        response.setAllConference(conferences);
+        return ResponseEntity.ok(response);
+    }
+
+//    @PostMapping("/personalInformation")
+//    public ResponseEntity<?> personalInformation(@RequestBody PersonalInformationRequest request){
+//        logger.debug("GetPersonalInformation"+request.toString());
+//
+//        String token;
+//        try {
+//            token = authService.personalInformation(request.getUsername());
+//        }catch (UsernameNotFoundException ex){
+//            return new ControllerAdvisor().handleUsernameNotFoundException(ex);
+//        }
+//
+//        HashMap<String, String> response = new HashMap<>();
+//        response.put("token",token);
+//
+//        return ResponseEntity.ok(response);
+//    }
     /**
-     * This is a function to test your connectivity. (健康测试时，可能会用到它）.
+     * This is a function to test your connectivity.
      */
     @GetMapping("/welcome")
     public ResponseEntity<?> welcome() {
