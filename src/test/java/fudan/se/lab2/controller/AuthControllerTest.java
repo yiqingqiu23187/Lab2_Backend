@@ -51,16 +51,7 @@ public void testApplyConfer() throws Exception {
 //TODO: Test goes here... 
 } 
 
-/** 
-* 
-* Method: personalInformation(@RequestBody PersonalInformationRequest request) 
-* 
-*/ 
-@Test
-public void testPersonalInformation() throws Exception { 
-//TODO: Test goes here...
 
-} 
 
 /** 
 * 

@@ -1,12 +1,21 @@
 package fudan.se.lab2.controller.request;
 
-public class ConferenceRequest {
+public class ApplyConferenceRequest {
     private String abbr;
     private String fullName;
     private String holdDate;
     private String holdPlace;
     private String submissionDeadline;
     private String releaseDate;
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getAbbr() {
         return abbr;

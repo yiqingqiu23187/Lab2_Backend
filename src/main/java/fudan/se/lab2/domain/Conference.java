@@ -1,6 +1,7 @@
 package fudan.se.lab2.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 
 @Entity
 public class Conference {
@@ -16,16 +17,47 @@ public class Conference {
     private String holdPlace;
     private String submissionDeadline;
     private String releaseDate;
+    private String chair;
+    private ArrayList<String> PCMembers;
+    private ArrayList<String> authors;
+
+
+    public ArrayList<String> getAuthor() {
+        return authors;
+    }
+
+    public void setAuthor(ArrayList<String> authors) {
+        this.authors = authors;
+    }
+
     private int state;//state:0: To be aproved  1:Audit success   2:Audit failure
+
+    public String getChair() {
+        return chair;
+    }
+
+    public void setChair(String chair) {
+        this.chair = chair;
+    }
+
+    public ArrayList<String> getPCMembers() {
+        return PCMembers;
+    }
+
+    public void setPCMembers(ArrayList<String> PCMembers) {
+        this.PCMembers = PCMembers;
+    }
+
     public Conference(){}
     public Conference( String abbr, String fullName, String holdDate, String holdPlace, String submissionDeadline,
-             String releaseDate,int state){
+             String releaseDate, String chair,int state){
         this.abbr = abbr;
         this.fullName = fullName;
         this.holdDate = holdDate;
         this.holdPlace = holdPlace;
         this.submissionDeadline = submissionDeadline;
         this.releaseDate = releaseDate;
+        this.chair=chair;
         this.state = state;
     }
     public Long getId() {

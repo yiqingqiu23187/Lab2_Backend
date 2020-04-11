@@ -1,8 +1,9 @@
 package fudan.se.lab2.service;
 
-import fudan.se.lab2.controller.request.ConferenceRequest;
-import fudan.se.lab2.controller.request.PersonalInformationRequest;
+import fudan.se.lab2.controller.request.ApplyConferenceRequest;
+import fudan.se.lab2.controller.request.MyConferenceRequest;
 import fudan.se.lab2.controller.request.RegisterRequest;
+import fudan.se.lab2.controller.response.MyConferenceResponce;
 import fudan.se.lab2.domain.Conference;
 import fudan.se.lab2.domain.User;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
@@ -64,28 +65,32 @@ public class AuthService {
     }
 
 
-    public Conference applyConfer(ConferenceRequest request) throws ConferHasBeenRegisteredException {
+    public Conference applyConfer(ApplyConferenceRequest request) throws ConferHasBeenRegisteredException {
         if(conferenceRepository.findByFullName(request.getFullName()) != null)
             throw new ConferHasBeenRegisteredException(request.getFullName());
         Conference conference = new Conference(request.getAbbr(),request.getFullName(),
                 request.getHoldDate(),request.getHoldPlace(),request.getSubmissionDeadline(),
-                request.getReleaseDate(),0);
+                request.getReleaseDate(),request.getUsername(),0);
         conferenceRepository.save(conference);
         return conference;
     }
+
 
     public Iterable<Conference> findAllConference(){
         Iterable<Conference> conferences =  conferenceRepository.findAll();
         return conferences;
     }
 
-//    public String personalInformation(String username){
-//        User user = userRepository.findByUsername(username);
-//        if (user == null)throw new UsernameNotFoundException(username);
-//
-//        //Iterable<Conference> conferences = conferenceRepository.findAllById(username);
-//
-//        return jwtTokenUtil.generateToken(user);
-//    }
+
+    public void findMyConference(String username,MyConferenceResponce responce){
+        User user = userRepository.findByUsername(username);
+        ArrayList<String> conferenceFullname = user.getConferenceFullname();
+        for (String each:conferenceFullname){
+            Conference conference = conferenceRepository.findByFullName(each);
+            if (conference.getChair()==username)responce.getChairConference().add(conference);
+            if (conference.getPCMembers().contains(username))responce.getPCConference().add(conference);
+            if (conference.getAuthor().contains(username))responce.getAuthorConference().add(conference);
+        }
+    }
 
 }

@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +29,15 @@ public class User implements UserDetails {
     private String email;
     private String area;
     private String unit;
+    private ArrayList<String> conferenceFullname;
 
+    public ArrayList<String> getConferenceFullname() {
+        return conferenceFullname;
+    }
+
+    public void setConferenceFullname(ArrayList<String> conferenceFullname) {
+        this.conferenceFullname = conferenceFullname;
+    }
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<Authority> authorities = new HashSet<>();

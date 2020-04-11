@@ -1,11 +1,13 @@
 package fudan.se.lab2.controller;
 
-import fudan.se.lab2.controller.request.ConferenceRequest;
+import fudan.se.lab2.controller.request.ApplyConferenceRequest;
 import fudan.se.lab2.controller.request.LoginRequest;
-import fudan.se.lab2.controller.request.PersonalInformationRequest;
+import fudan.se.lab2.controller.request.MyConferenceRequest;
+import fudan.se.lab2.controller.request.MyConferenceRequest;
 import fudan.se.lab2.controller.request.RegisterRequest;
 import fudan.se.lab2.controller.response.AllConferenceResponse;
 import fudan.se.lab2.controller.response.LoginResponse;
+import fudan.se.lab2.controller.response.MyConferenceResponce;
 import fudan.se.lab2.domain.Conference;
 import fudan.se.lab2.domain.User;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
@@ -74,7 +76,7 @@ public class AuthController {
     }
 
     @PostMapping("/applyConference")
-    public ResponseEntity<?> applyConfer(@RequestBody ConferenceRequest request){
+    public ResponseEntity<?> applyConfer(@RequestBody ApplyConferenceRequest request){
         logger.debug("ApplyForm: " + request.toString());
 
         Conference conference;
@@ -94,22 +96,14 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-//    @PostMapping("/personalInformation")
-//    public ResponseEntity<?> personalInformation(@RequestBody PersonalInformationRequest request){
-//        logger.debug("GetPersonalInformation"+request.toString());
-//
-//        String token;
-//        try {
-//            token = authService.personalInformation(request.getUsername());
-//        }catch (UsernameNotFoundException ex){
-//            return new ControllerAdvisor().handleUsernameNotFoundException(ex);
-//        }
-//
-//        HashMap<String, String> response = new HashMap<>();
-//        response.put("token",token);
-//
-//        return ResponseEntity.ok(response);
-//    }
+    @GetMapping("/myConference")
+    public ResponseEntity<?> myConference(@RequestBody MyConferenceRequest request){
+        MyConferenceResponce responce = new MyConferenceResponce();
+        authService.findMyConference(request.getUsername(),responce);
+
+        return ResponseEntity.ok(responce);
+    }
+
     /**
      * This is a function to test your connectivity.
      */
