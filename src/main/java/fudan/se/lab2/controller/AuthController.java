@@ -2,10 +2,7 @@ package fudan.se.lab2.controller;
 
 import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.controller.request.MyConferenceRequest;
-import fudan.se.lab2.controller.response.AllConferenceResponse;
-import fudan.se.lab2.controller.response.LoginResponse;
-import fudan.se.lab2.controller.response.MessageResponse;
-import fudan.se.lab2.controller.response.MyConferenceResponce;
+import fudan.se.lab2.controller.response.*;
 import fudan.se.lab2.domain.Conference;
 import fudan.se.lab2.domain.User;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
@@ -60,7 +57,7 @@ public class AuthController {
         String token;
         try {
             user = authService.login(request.getUsername(),request.getPassword());
-            token=authService.login(request.getUsername());
+            token= authService.login(request.getUsername());
         }catch (UsernameNotFoundException ex){
             return new ControllerAdvisor().handleUsernameNotFoundException(ex);
         }catch (BadCredentialsException ex){
@@ -112,6 +109,35 @@ public class AuthController {
         return ResponseEntity.ok(responce);
     }
 
+    @GetMapping("/getAllUser")
+    public ResponseEntity<?> allUser(){
+        AllUserResponse response = new AllUserResponse();
+        Iterable<User> users = authService.findAllUser();
+        response.setUsers(users);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("/openConference")
+    public ResponseEntity<?> openConference(@RequestBody OpenConferenceRequest request){
+        Conference conference = authService.openConference(request.getChair(),request.getConferenceFullname(),request.getOpenOrNot());
+        return ResponseEntity.ok(conference);
+    }
+
+    @PostMapping("/invite")
+    public ResponseEntity<?> invite(@RequestBody InviteRequest request){
+        InviteResponse response = new InviteResponse();
+        authService.invite(request,response);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+
+//    @PostMapping("/sendPaper")
+//    public ResponseEntity<?> sendPaper(@RequestBody ){
+//
+//    }
     /**
      * This is a function to test your connectivity.
      */
@@ -123,6 +149,4 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 }
-
-
 

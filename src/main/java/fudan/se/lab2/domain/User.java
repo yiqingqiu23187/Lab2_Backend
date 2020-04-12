@@ -31,6 +31,25 @@ public class User implements UserDetails {
     private String unit;
     private ArrayList<String> conferenceFullname = new ArrayList<>();
 
+
+
+
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<Authority> authorities = new HashSet<>();
+
+    public User() {
+    }
+
+    public User(String username, String password, String fullname, String email, String area,
+                String unit) {
+        this.username = username;
+        this.password = password;
+        this.fullname = fullname;
+        this.email = email;
+        this.area = area;
+        this.unit = unit;
+    }
+
     public ArrayList<String> getConferenceFullname() {
         return conferenceFullname;
     }
@@ -39,24 +58,13 @@ public class User implements UserDetails {
         this.conferenceFullname = conferenceFullname;
     }
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    private Set<Authority> authorities = new HashSet<>();
-
-
-    public User() {}
-    public User(String username, String password, String fullname,String email,String area,
-                 String unit) {
-        this.username = username;
-        this.password= password;
-        this.fullname = fullname;
-        this.email = email;
-        this.area = area;
-        this.unit = unit;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 
     @Override
@@ -64,9 +72,17 @@ public class User implements UserDetails {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -97,14 +113,6 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getFullname() {
         return fullname;
     }
@@ -113,9 +121,6 @@ public class User implements UserDetails {
         this.fullname = fullname;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
     public String getEmail() {
         return email;
     }

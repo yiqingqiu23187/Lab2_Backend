@@ -13,7 +13,7 @@ public class Invitation {
     private String invitingParty;
     private String invitedParty;
     private String conferenceFullname;
-    private int state;
+    private int state;//state:0: To be aproved  1: accept  2:refuse
 
     public Long getId() {
         return id;

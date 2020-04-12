@@ -17,10 +17,28 @@ public class Conference {
     private String holdPlace;
     private String submissionDeadline;
     private String releaseDate;
+    private Boolean openOrNot;
+    private int state;//state:0: To be aproved  1:Audit success   2:Audit failure
+
     private String chair;
     private ArrayList<String> PCMembers = new ArrayList<>();
     private ArrayList<String> authors = new ArrayList<>();
 
+    public Boolean getOpenOrNot() {
+        return openOrNot;
+    }
+
+    public void setOpenOrNot(Boolean openOrNot) {
+        this.openOrNot = openOrNot;
+    }
+
+    public ArrayList<String> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(ArrayList<String> authors) {
+        this.authors = authors;
+    }
 
     public ArrayList<String> getAuthor() {
         return authors;
@@ -30,7 +48,6 @@ public class Conference {
         this.authors = authors;
     }
 
-    private int state;//state:0: To be aproved  1:Audit success   2:Audit failure
 
     public String getChair() {
         return chair;
@@ -50,7 +67,7 @@ public class Conference {
 
     public Conference(){}
     public Conference( String abbr, String fullName, String holdDate, String holdPlace, String submissionDeadline,
-             String releaseDate, String chair,int state){
+             String releaseDate, String chair,Boolean openOrNot,int state){
         this.abbr = abbr;
         this.fullName = fullName;
         this.holdDate = holdDate;
@@ -59,6 +76,7 @@ public class Conference {
         this.releaseDate = releaseDate;
         this.chair=chair;
         this.state = state;
+        this.openOrNot=openOrNot;
     }
     public Long getId() {
         return id;

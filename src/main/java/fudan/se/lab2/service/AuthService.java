@@ -1,9 +1,7 @@
 package fudan.se.lab2.service;
 
-import fudan.se.lab2.controller.request.ApplyConferenceRequest;
-import fudan.se.lab2.controller.request.MessageRequest;
-import fudan.se.lab2.controller.request.MyConferenceRequest;
-import fudan.se.lab2.controller.request.RegisterRequest;
+import fudan.se.lab2.controller.request.*;
+import fudan.se.lab2.controller.response.InviteResponse;
 import fudan.se.lab2.controller.response.MessageResponse;
 import fudan.se.lab2.controller.response.MyConferenceResponce;
 import fudan.se.lab2.domain.Conference;
@@ -76,10 +74,10 @@ public class AuthService {
             throw new ConferHasBeenRegisteredException(request.getFullName());
         User user = userRepository.findByUsername(username);
         user.getConferenceFullname().add(request.getFullName());
+        userRepository.save(user);
         Conference conference = new Conference(request.getAbbr(),request.getFullName(),
                 request.getHoldDate(),request.getHoldPlace(),request.getSubmissionDeadline(),
-                request.getReleaseDate(),request.getUsername(),0);
-
+                request.getReleaseDate(),request.getUsername(),false,0);
         conferenceRepository.save(conference);
         return conference;
     }
@@ -90,13 +88,17 @@ public class AuthService {
         return conferences;
     }
 
+    public Iterable<User> findAllUser(){
+        Iterable<User> users = userRepository.findAll();
+        return users;
+    }
 
     public void findMyConference(String username,MyConferenceResponce responce){
         User user = userRepository.findByUsername(username);
         ArrayList<String> conferenceFullname = user.getConferenceFullname();
         for (String each:conferenceFullname){
             Conference conference = conferenceRepository.findByFullName(each);
-            if (conference.getChair()==username)responce.getChairConference().add(conference);
+            if (conference.getChair().equals(username))responce.getChairConference().add(conference);
             if (conference.getPCMembers().contains(username))responce.getPCConference().add(conference);
             if (conference.getAuthor().contains(username))responce.getAuthorConference().add(conference);
         }
@@ -116,4 +118,29 @@ public class AuthService {
         response.setApplication(application);
     }
 
+    public Conference openConference(String chair,String conferenceFullname,Boolean openOrNot){
+        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+        if (conference.getChair().equals(chair)){
+            conference.setOpenOrNot(openOrNot);
+        }
+        return conference;
+    }
+
+    public void invite(InviteRequest request, InviteResponse response){
+        Conference conference = conferenceRepository.findByFullName(request.getConferenceFullname());
+        if (conference.getChair().equals(request.getChair())){
+            for (String username:request.getUsernames()) {
+                Invitation invitation = new Invitation();
+                invitation.setInvitingParty(request.getChair());
+                invitation.setInvitedParty(username);
+                invitation.setConferenceFullname(request.getConferenceFullname());
+                invitation.setState(0);
+                invitationRepository.save(invitation);
+                User user = userRepository.findByUsername(username);
+                response.getUsers().add(user);
+            }
+        }else {
+            System.out.println("Conference's chair is not the current user");
+        }
+    }
 }
