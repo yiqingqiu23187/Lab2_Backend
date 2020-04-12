@@ -79,7 +79,7 @@ public class AuthController {
 
         Conference conference;
         try {
-            conference = authService.applyConfer(request);
+            conference = authService.applyConfer(request.getUsername(),request);
         }catch (ConferHasBeenRegisteredException ex){
             return new ControllerAdvisor().handleConferHasBeenRegisteredException(ex);
         }
@@ -96,6 +96,7 @@ public class AuthController {
 
     @PostMapping("/myConference")
     public ResponseEntity<?> myConference(@RequestBody MyConferenceRequest request){
+
         MyConferenceResponce responce = new MyConferenceResponce();
         authService.findMyConference(request.getUsername(),responce);
 

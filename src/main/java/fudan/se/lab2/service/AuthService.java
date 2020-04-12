@@ -71,12 +71,15 @@ public class AuthService {
     }
 
 
-    public Conference applyConfer(ApplyConferenceRequest request) throws ConferHasBeenRegisteredException {
+    public Conference applyConfer(String username,ApplyConferenceRequest request) throws ConferHasBeenRegisteredException {
         if(conferenceRepository.findByFullName(request.getFullName()) != null)
             throw new ConferHasBeenRegisteredException(request.getFullName());
+        User user = userRepository.findByUsername(username);
+        user.getConferenceFullname().add(request.getFullName());
         Conference conference = new Conference(request.getAbbr(),request.getFullName(),
                 request.getHoldDate(),request.getHoldPlace(),request.getSubmissionDeadline(),
                 request.getReleaseDate(),request.getUsername(),0);
+
         conferenceRepository.save(conference);
         return conference;
     }
@@ -100,7 +103,7 @@ public class AuthService {
     }
 
     public void getMessage(String username, MessageResponse response){
-        ArrayList<Invitation> invitations = invitationRepository.findAllByInvitedParty();
+        ArrayList<Invitation> invitations = invitationRepository.findAllByInvitedParty(username);
 
         ArrayList<Conference> invitation = new ArrayList<>();
         ArrayList<Conference> application = conferenceRepository.findAllByChair(username);

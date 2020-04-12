@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String email;
     private String area;
     private String unit;
-    private ArrayList<String> conferenceFullname;
+    private ArrayList<String> conferenceFullname = new ArrayList<>();
 
     public ArrayList<String> getConferenceFullname() {
         return conferenceFullname;

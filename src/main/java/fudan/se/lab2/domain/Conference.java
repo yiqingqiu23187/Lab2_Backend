@@ -18,8 +18,8 @@ public class Conference {
     private String submissionDeadline;
     private String releaseDate;
     private String chair;
-    private ArrayList<String> PCMembers;
-    private ArrayList<String> authors;
+    private ArrayList<String> PCMembers = new ArrayList<>();
+    private ArrayList<String> authors = new ArrayList<>();
 
 
     public ArrayList<String> getAuthor() {
