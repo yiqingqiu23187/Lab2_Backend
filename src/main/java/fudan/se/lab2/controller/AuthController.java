@@ -4,6 +4,8 @@ import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.controller.request.MyConferenceRequest;
 import fudan.se.lab2.controller.response.*;
 import fudan.se.lab2.domain.Conference;
+import fudan.se.lab2.domain.Invitation;
+import fudan.se.lab2.domain.Paper;
 import fudan.se.lab2.domain.User;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
 import fudan.se.lab2.exception.ControllerAdvisor;
@@ -17,6 +19,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,7 +76,6 @@ public class AuthController {
     @PostMapping("/applyConference")
     public ResponseEntity<?> applyConfer(@RequestBody ApplyConferenceRequest request){
         logger.debug("ApplyForm: " + request.toString());
-
         Conference conference;
         try {
             conference = authService.applyConfer(request.getUsername(),request);
@@ -86,8 +88,9 @@ public class AuthController {
     @GetMapping("/allConference")
     public  ResponseEntity<?> allConference(){
         AllConferenceResponse response = new AllConferenceResponse();
-        Iterable<Conference> conferences = authService.findAllConference();
+        ArrayList<Conference> conferences = authService.findAllConference();
         response.setAllConference(conferences);
+
         return ResponseEntity.ok(response);
     }
 
@@ -96,7 +99,6 @@ public class AuthController {
 
         MyConferenceResponce responce = new MyConferenceResponce();
         authService.findMyConference(request.getUsername(),responce);
-
         return ResponseEntity.ok(responce);
     }
 
@@ -132,12 +134,42 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/handleInvitation")
+    public ResponseEntity<?> handleInvitation(@RequestBody HandleInvitationRequest request){
+        Invitation invitation = authService.handleInvitation(request.getUsername(),request.getConferenceFullname(),request.getAgreeOrNot());
+
+        return ResponseEntity.ok(invitation);
+    }
 
 
-//    @PostMapping("/sendPaper")
-//    public ResponseEntity<?> sendPaper(@RequestBody ){
-//
-//    }
+    @GetMapping("/waitingConference")
+    public ResponseEntity<?> waitingConference(){
+        WaitingConferenceResponse response = new WaitingConferenceResponse();
+        authService.waitingConference(response);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/handleConference")
+    public ResponseEntity<?> handleConference(@RequestBody HandleConferenceRequest request){
+        Conference conference = authService.handleConference(request.getConferenceFullname(),request.getAgreeOrNot());
+
+        return ResponseEntity.ok(conference);
+    }
+
+    @PostMapping("/sendPaper")
+    public ResponseEntity<?> sendPaper(@RequestBody SendPaperRequest request){
+        Paper paper = authService.sendPaper(request);
+        return ResponseEntity.ok(paper);
+    }
+
+    @PostMapping("/myPaper")
+    public ResponseEntity<?> myPaper(@RequestBody MyPaperRequest request){
+        MyPaperResponse response = new MyPaperResponse();
+        authService.myPaper(request.getUsername(),request.getConferenceFullname(),response);
+
+        return ResponseEntity.ok(response);
+    }
     /**
      * This is a function to test your connectivity.
      */

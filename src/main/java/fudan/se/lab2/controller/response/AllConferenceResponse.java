@@ -5,13 +5,13 @@ import fudan.se.lab2.domain.Conference;
 import java.util.ArrayList;
 
 public class AllConferenceResponse {
-    private Iterable<Conference> allConference = new ArrayList<>();
+    private ArrayList<Conference> allConference = new ArrayList<>();
 
-    public Iterable<Conference> getAllConference() {
+    public ArrayList<Conference> getAllConference() {
         return allConference;
     }
 
-    public void setAllConference(Iterable allConference) {
+    public void setAllConference(ArrayList<Conference> allConference) {
         this.allConference = allConference;
     }
 }

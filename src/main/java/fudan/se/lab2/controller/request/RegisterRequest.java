@@ -9,7 +9,7 @@ public class RegisterRequest {
     private String fullname;
     private String email;
     private String area;
-    private String unit;
+    private String job;
 
     public RegisterRequest() {}
 
@@ -59,12 +59,12 @@ public class RegisterRequest {
         this.area = area;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getJob() {
+        return job;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setJob(String job) {
+        this.job = job;
     }
 }
 

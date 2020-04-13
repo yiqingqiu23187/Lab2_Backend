@@ -1,24 +1,24 @@
 package fudan.se.lab2.service;
 
 import fudan.se.lab2.controller.request.*;
-import fudan.se.lab2.controller.response.InviteResponse;
-import fudan.se.lab2.controller.response.MessageResponse;
-import fudan.se.lab2.controller.response.MyConferenceResponce;
+import fudan.se.lab2.controller.response.*;
 import fudan.se.lab2.domain.Conference;
 import fudan.se.lab2.domain.Invitation;
+import fudan.se.lab2.domain.Paper;
 import fudan.se.lab2.domain.User;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
 import fudan.se.lab2.exception.UNHasBeenRegisteredException;
-import fudan.se.lab2.repository.AuthorityRepository;
-import fudan.se.lab2.repository.ConferenceRepository;
-import fudan.se.lab2.repository.InvitationRepository;
-import fudan.se.lab2.repository.UserRepository;
+import fudan.se.lab2.repository.*;
 import fudan.se.lab2.security.jwt.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -30,15 +30,17 @@ public class AuthService {
     private AuthorityRepository authorityRepository;
     private ConferenceRepository conferenceRepository;
     private InvitationRepository invitationRepository;
+    private PaperRepository paperRepository;
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     public AuthService(UserRepository userRepository, AuthorityRepository authorityRepository,
-    ConferenceRepository conferenceRepository,InvitationRepository invitationRepository,JwtTokenUtil jwtTokenUtil) {
+    ConferenceRepository conferenceRepository,InvitationRepository invitationRepository,PaperRepository paperRepository,JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.conferenceRepository = conferenceRepository;
         this.invitationRepository = invitationRepository;
+        this.paperRepository = paperRepository;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
@@ -47,7 +49,7 @@ public class AuthService {
             throw new UNHasBeenRegisteredException(request.getUsername());
         }
         User user = new User(request.getUsername(),request.getPassword(),
-                request.getFullname(),request.getEmail(),request.getArea(),request.getUnit());
+                request.getFullname(),request.getEmail(),request.getArea(),request.getJob());
         userRepository.save(user);
         return user;
     }
@@ -83,8 +85,8 @@ public class AuthService {
     }
 
 
-    public Iterable<Conference> findAllConference(){
-        Iterable<Conference> conferences =  conferenceRepository.findAll();
+    public ArrayList<Conference> findAllConference(){
+        ArrayList<Conference> conferences =  conferenceRepository.findAllByState(1);
         return conferences;
     }
 
@@ -123,6 +125,7 @@ public class AuthService {
         if (conference.getChair().equals(chair)){
             conference.setOpenOrNot(openOrNot);
         }
+        conferenceRepository.save(conference);
         return conference;
     }
 
@@ -142,5 +145,80 @@ public class AuthService {
         }else {
             System.out.println("Conference's chair is not the current user");
         }
+    }
+
+    public Invitation handleInvitation(String username,String conferenceFullname,Boolean agreeOrNot){
+        Invitation invitation = invitationRepository.findByInvitedPartyAndConferenceFullname(username,conferenceFullname);
+        if (invitation!=null){
+            if (agreeOrNot){
+                invitation.setState(1);
+                invitationRepository.save(invitation);
+                Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+                conference.getPCMembers().add(username);
+                conferenceRepository.save(conference);
+                User user = userRepository.findByUsername(username);
+                user.getConferenceFullname().add(conferenceFullname);
+                userRepository.save(user);
+            }else {
+                invitation.setState(2);
+                invitationRepository.save(invitation);
+            }
+        }else {
+            System.out.println("this conference dose not exist");
+        }
+        return invitation;
+    }
+
+
+    public void waitingConference(WaitingConferenceResponse response){
+        ArrayList<Invitation> invitations = invitationRepository.findAllByState(0);
+        for (Invitation each:invitations) {
+            Conference conference = conferenceRepository.findByFullName(each.getConferenceFullname());
+            response.getWaitingConference().add(conference);
+        }
+    }
+
+    public Conference handleConference(String conferenceFullname,Boolean agreeOrNot){
+        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+        if (agreeOrNot)conference.setState(1);
+        else conference.setState(2);
+        conferenceRepository.save(conference);
+        return conference;
+    }
+
+    public Paper sendPaper(SendPaperRequest request){
+        Paper paper = new Paper();
+        paper.setUsername(request.getUsername());
+        paper.setConferenceFullname(request.getConferenceFullname());
+        paper.setTitle(request.getTitle());
+        paper.setSummary(request.getSummary());
+        paperRepository.save(paper);
+
+        //store paper
+        MultipartFile file = request.getFile();
+        String pathName = "/usr/local/paper";//address
+        String pname = file.getOriginalFilename();
+        pathName += pname;
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(pathName);
+            fos.write(file.getBytes()); // 写入文件
+            //System.out.println("文件上传成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return paper;
+    }
+
+    public void myPaper(String username, String conferenceFullname, MyPaperResponse response){
+        ArrayList<Paper> papers = paperRepository.findAllByUsernameAndConferenceFullname(username,conferenceFullname);
+        response.setPapers(papers);
     }
 }
