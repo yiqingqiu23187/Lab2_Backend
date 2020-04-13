@@ -9,6 +9,6 @@ import java.util.ArrayList;
 @Repository
 public interface PaperRepository extends CrudRepository<Paper, Long> {
     Paper findByUsername(String username);
-    ArrayList<Paper> findAllByUsernameAndConferenceFullname(String username,String conferenceFullname);
+    Iterable<Paper> findByUsernameAndConferenceFullname(String username,String conferenceFullname);
 
 }

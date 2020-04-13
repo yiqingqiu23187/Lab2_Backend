@@ -9,6 +9,6 @@ import java.util.ArrayList;
 @Repository
 public interface ConferenceRepository extends CrudRepository<Conference, Long> {
    Conference findByFullName(String fullName);
-   ArrayList<Conference> findAllByChair(String chair);
-   ArrayList<Conference> findAllByState(int state);
+   Iterable<Conference> findByChair(String chair);
+   Iterable<Conference> findByState(int state);
 }

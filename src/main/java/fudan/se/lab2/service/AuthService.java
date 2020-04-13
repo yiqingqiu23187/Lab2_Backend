@@ -86,8 +86,12 @@ public class AuthService {
 
 
     public ArrayList<Conference> findAllConference(){
-        ArrayList<Conference> conferences =  conferenceRepository.findAllByState(1);
-        return conferences;
+        ArrayList<Conference> result = new ArrayList<>();
+        Iterable<Conference> conferences =  conferenceRepository.findByState(1);
+        for (Conference each:conferences){
+            result.add(each);
+        }
+        return result;
     }
 
     public Iterable<User> findAllUser(){
@@ -107,17 +111,25 @@ public class AuthService {
     }
 
     public void getMessage(String username, MessageResponse response){
-        ArrayList<Invitation> invitations = invitationRepository.findAllByInvitedParty(username);
+        ArrayList<Invitation> invitations = new ArrayList<>();
+        Iterable<Invitation> invitations1 = invitationRepository.findByInvitedParty(username);
+        for (Invitation each:invitations1){
+            invitations.add(each);
+        }
 
         ArrayList<Conference> invitation = new ArrayList<>();
-        ArrayList<Conference> application = conferenceRepository.findAllByChair(username);
 
         for (Invitation each: invitations){
             invitation.add(conferenceRepository.findByFullName(each.getConferenceFullname()));
         }
 
+        Iterable<Conference> application = conferenceRepository.findByChair(username);
+        ArrayList<Conference> applications = new ArrayList<>();
+        for (Conference each:application){
+            applications.add(each);
+        }
         response.setInvitation(invitation);
-        response.setApplication(application);
+        response.setApplication(applications);
     }
 
     public Conference openConference(String chair,String conferenceFullname,Boolean openOrNot){
@@ -171,11 +183,28 @@ public class AuthService {
 
 
     public void waitingConference(WaitingConferenceResponse response){
-        ArrayList<Invitation> invitations = invitationRepository.findAllByState(0);
+        ArrayList<Invitation> invitations = new ArrayList<>();
+         Iterable<Invitation> temp      = invitationRepository.findByState(0);
+        for (Invitation each:temp){
+            invitations.add(each);
+        }
+
+
         for (Invitation each:invitations) {
             Conference conference = conferenceRepository.findByFullName(each.getConferenceFullname());
             response.getWaitingConference().add(conference);
         }
+    }
+
+    public ArrayList<Conference> admin(){
+        ArrayList<Conference> result = new ArrayList<>();
+        Iterable<Conference> conferences =  conferenceRepository.findByState(0);
+
+        for (Conference each:conferences){
+            result.add(each);
+        }
+        System.out.println(result.size());
+        return result;
     }
 
     public Conference handleConference(String conferenceFullname,Boolean agreeOrNot){
@@ -218,7 +247,12 @@ public class AuthService {
     }
 
     public void myPaper(String username, String conferenceFullname, MyPaperResponse response){
-        ArrayList<Paper> papers = paperRepository.findAllByUsernameAndConferenceFullname(username,conferenceFullname);
+        ArrayList<Paper> papers = new ArrayList<>();
+        Iterable<Paper> temp =        paperRepository.findByUsernameAndConferenceFullname(username,conferenceFullname);
+        for (Paper each:temp){
+            papers.add(each);
+        }
+
         response.setPapers(papers);
     }
 }

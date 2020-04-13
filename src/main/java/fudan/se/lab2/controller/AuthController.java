@@ -150,6 +150,12 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/admin")
+    public  ResponseEntity<?> admin(){
+        ArrayList<Conference> waitingConference = authService.admin();
+
+        return ResponseEntity.ok(waitingConference);
+    }
     @PostMapping("/handleConference")
     public ResponseEntity<?> handleConference(@RequestBody HandleConferenceRequest request){
         Conference conference = authService.handleConference(request.getConferenceFullname(),request.getAgreeOrNot());
