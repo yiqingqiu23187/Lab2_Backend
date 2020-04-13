@@ -28,7 +28,7 @@ public class User implements UserDetails {
     private String fullname;
     private String email;
     private String area;
-    private String unit;
+    private String job;
     private ArrayList<String> conferenceFullname = new ArrayList<>();
 
 
@@ -41,13 +41,13 @@ public class User implements UserDetails {
     }
 
     public User(String username, String password, String fullname, String email, String area,
-                String unit) {
+                String job) {
         this.username = username;
         this.password = password;
         this.fullname = fullname;
         this.email = email;
         this.area = area;
-        this.unit = unit;
+        this.job = job;
     }
 
     public ArrayList<String> getConferenceFullname() {
@@ -137,12 +137,11 @@ public class User implements UserDetails {
         this.area = area;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getJob() {
+        return job;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setJob(String job) {
+        this.job = job;
     }
-
 }

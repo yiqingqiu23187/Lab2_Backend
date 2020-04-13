@@ -160,7 +160,8 @@ public class AuthService {
     }
 
     public Invitation handleInvitation(String username,String conferenceFullname,Boolean agreeOrNot){
-        Invitation invitation = invitationRepository.findByInvitedPartyAndConferenceFullname(username,conferenceFullname);
+        Invitation invitation = invitationRepository.
+                findByInvitedPartyAndConferenceFullname(username,conferenceFullname);
         if (invitation!=null){
             if (agreeOrNot){
                 invitation.setState(1);
@@ -248,7 +249,7 @@ public class AuthService {
 
     public void myPaper(String username, String conferenceFullname, MyPaperResponse response){
         ArrayList<Paper> papers = new ArrayList<>();
-        Iterable<Paper> temp =        paperRepository.findByUsernameAndConferenceFullname(username,conferenceFullname);
+        Iterable<Paper> temp =paperRepository.findByUsernameAndConferenceFullname(username,conferenceFullname);
         for (Paper each:temp){
             papers.add(each);
         }

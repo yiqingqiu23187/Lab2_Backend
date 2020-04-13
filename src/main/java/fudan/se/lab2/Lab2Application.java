@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Collections;
 import java.util.HashSet;
 
+
 /**
  * Welcome to 2020 Software Engineering Lab2.
  * This is your first lab to write your own code and build a spring boot application.
@@ -44,13 +45,15 @@ public class Lab2Application {
 
                 // Create an admin if not exists.
                 if (userRepository.findByUsername("admin") == null) {
-//                    User admin = new User(
-//                            "admin",
-//                            passwordEncoder.encode("password"),
-//                            "352021",
-//                            new HashSet<>(Collections.singletonList(adminAuthority))
-//                    );
-//                    userRepository.save(admin);
+                    User admin = new User(
+                            "admin",
+                            passwordEncoder.encode("password"),
+                            "TA",
+                            "1@fudan.edu.cn",
+                            "China",
+                            "student"
+                            );
+                    userRepository.save(admin);
                }
             }
 
