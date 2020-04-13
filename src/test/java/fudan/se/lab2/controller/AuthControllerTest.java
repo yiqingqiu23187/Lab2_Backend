@@ -1,4 +1,4 @@
-package fudan.se.lab2.controller;
+﻿package fudan.se.lab2.controller;
 
 import fudan.se.lab2.controller.request.ApplyConferenceRequest;
 import fudan.se.lab2.controller.request.LoginRequest;
@@ -73,7 +73,7 @@ public class AuthControllerTest {
         request.setArea("China");
         request.setEmail("18302010034@fudan.edu.cn");
         request.setFullname("Huangzihao");
-        request.setJob("student");
+        request.setJob("students");
 
         //userRepository.deleteAll();
         authController.register(request);
