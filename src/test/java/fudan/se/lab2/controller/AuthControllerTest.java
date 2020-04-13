@@ -73,7 +73,7 @@ public class AuthControllerTest {
         request.setArea("China");
         request.setEmail("18302010034@fudan.edu.cn");
         request.setFullname("Huangzihao");
-        request.setUnit("student");
+        request.setJob("student");
 
         //userRepository.deleteAll();
         authController.register(request);
