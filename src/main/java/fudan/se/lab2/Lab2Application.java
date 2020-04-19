@@ -47,7 +47,7 @@ public class Lab2Application {
                 if (userRepository.findByUsername("admin") == null) {
                     User admin = new User(
                             "admin",
-                            passwordEncoder.encode("password"),
+                            "password",
                             "TA",
                             "1@fudan.edu.cn",
                             "China",
