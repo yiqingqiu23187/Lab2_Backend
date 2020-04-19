@@ -58,7 +58,7 @@ User user = userRepository.findByUsername("admin");
                 //             "student"
                 //             );
                 //     userRepository.save(admin);
-               }
+               //}
             }
 
             private Authority getOrCreateAuthority(String authorityText, AuthorityRepository authorityRepository) {
