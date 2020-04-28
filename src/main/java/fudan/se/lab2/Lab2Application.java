@@ -44,21 +44,21 @@ public class Lab2Application {
                 Authority reviewerAuthority = getOrCreateAuthority("Reviewer", authorityRepository);
 
 
-User user = userRepository.findByUsername("admin");
-                user.setPassword("password");
-                userRepository.save(user);
-                // Create an admin if not exists.
-                // if (userRepository.findByUsername("admin") == null) {
-                //     User admin = new User(
-                //             "admin",
-                //             "password",
-                //             "TA",
-                //             "1@fudan.edu.cn",
-                //             "China",
-                //             "student"
-                //             );
-                //     userRepository.save(admin);
-               //}
+//    User user = userRepository.findByUsername("admin");
+//                user.setPassword("password");
+//                userRepository.save(user);
+                 //Create an admin if not exists.
+                 if (userRepository.findByUsername("admin") == null) {
+                     User admin = new User(
+                             "admin",
+                             "password",
+                             "TA",
+                             "1@fudan.edu.cn",
+                             "China",
+                             "student"
+                             );
+                     userRepository.save(admin);
+               }
             }
 
             private Authority getOrCreateAuthority(String authorityText, AuthorityRepository authorityRepository) {

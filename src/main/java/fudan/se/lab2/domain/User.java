@@ -31,9 +31,6 @@ public class User implements UserDetails {
     private String job;
     private ArrayList<String> conferenceFullname = new ArrayList<>();
 
-
-
-
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<Authority> authorities = new HashSet<>();
 

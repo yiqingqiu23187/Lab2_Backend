@@ -11,12 +11,14 @@ import fudan.se.lab2.exception.UNHasBeenRegisteredException;
 import fudan.se.lab2.repository.*;
 import fudan.se.lab2.security.jwt.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.servlet.http.HttpServletRequest;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -216,17 +218,19 @@ public class AuthService {
         return conference;
     }
 
-    public Paper sendPaper(SendPaperRequest request){
-        Paper paper = new Paper();
-        paper.setUsername(request.getUsername());
-        paper.setConferenceFullname(request.getConferenceFullname());
-        paper.setTitle(request.getTitle());
-        paper.setSummary(request.getSummary());
+    public Paper sendPaper(HttpServletRequest request, MultipartFile file){
+    Paper paper = new Paper();
+        paper.setUsername(request.getParameter("username"));
+        paper.setConferenceFullname(request.getParameter("conferenceFullname"));
+        paper.setTitle(request.getParameter("title"));
+        paper.setSummary(request.getParameter("summary"));
         paperRepository.save(paper);
 
+        Conference conference = conferenceRepository.findByFullName(request.getParameter("conferenceFullname"));
+        conference.getAuthors().add(request.getParameter("username"));
+        conferenceRepository.save(conference);
         //store paper
-        MultipartFile file = request.getFile();
-        String pathName = "/usr/local/paper";//address
+        String pathName = "C:\\Users\\Administrator\\Desktop\\lab3\\";//address
         String pname = file.getOriginalFilename();
         pathName += pname;
         FileOutputStream fos = null;
@@ -243,7 +247,6 @@ public class AuthService {
                 e.printStackTrace();
             }
         }
-
         return paper;
     }
 

@@ -18,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -165,8 +167,8 @@ public class AuthController {
     }
 
     @PostMapping("/sendPaper")
-    public ResponseEntity<?> sendPaper(@RequestBody SendPaperRequest request){
-        Paper paper = authService.sendPaper(request);
+    public ResponseEntity<?> sendPaper(HttpServletRequest request,@RequestParam(value = "file", required = false) MultipartFile file){
+        Paper paper = authService.sendPaper(request,file);
         return ResponseEntity.ok(paper);
     }
 
