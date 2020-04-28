@@ -75,17 +75,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/applyConference")
-    public ResponseEntity<?> applyConfer(@RequestBody ApplyConferenceRequest request){
-        logger.debug("ApplyForm: " + request.toString());
-        Conference conference;
-        try {
-            conference = authService.applyConfer(request.getUsername(),request);
-        }catch (ConferHasBeenRegisteredException ex){
-            return new ControllerAdvisor().handleConferHasBeenRegisteredException(ex);
-        }
-        return ResponseEntity.ok(conference);
-    }
+
 
     @GetMapping("/allConference")
     public  ResponseEntity<?> allConference(){
@@ -113,28 +103,7 @@ public class AuthController {
         return ResponseEntity.ok(responce);
     }
 
-    @GetMapping("/getAllUser")
-    public ResponseEntity<?> allUser(){
-        AllUserResponse response = new AllUserResponse();
-        Iterable<User> users = authService.findAllUser();
-        response.setUsers(users);
-        return ResponseEntity.ok(response);
-    }
 
-
-    @PostMapping("/openConference")
-    public ResponseEntity<?> openConference(@RequestBody OpenConferenceRequest request){
-        Conference conference = authService.openConference(request.getChair(),request.getConferenceFullname(),request.getOpenOrNot());
-        return ResponseEntity.ok(conference);
-    }
-
-    @PostMapping("/invite")
-    public ResponseEntity<?> invite(@RequestBody InviteRequest request){
-        InviteResponse response = new InviteResponse();
-        authService.invite(request,response);
-
-        return ResponseEntity.ok(response);
-    }
 
     @PostMapping("/handleInvitation")
     public ResponseEntity<?> handleInvitation(@RequestBody HandleInvitationRequest request){
@@ -144,41 +113,6 @@ public class AuthController {
     }
 
 
-    @GetMapping("/waitingConference")
-    public ResponseEntity<?> waitingConference(){
-        WaitingConferenceResponse response = new WaitingConferenceResponse();
-        authService.waitingConference(response);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/admin")
-    public  ResponseEntity<?> admin(){
-        AdminResponse response = new AdminResponse();
-        ArrayList<Conference> waitingConference = authService.admin();
-        response.setWaitingConference(waitingConference);
-        return ResponseEntity.ok(response);
-    }
-    @PostMapping("/handleConference")
-    public ResponseEntity<?> handleConference(@RequestBody HandleConferenceRequest request){
-        Conference conference = authService.handleConference(request.getConferenceFullname(),request.getAgreeOrNot());
-
-        return ResponseEntity.ok(conference);
-    }
-
-    @PostMapping("/sendPaper")
-    public ResponseEntity<?> sendPaper(HttpServletRequest request,@RequestParam(value = "file", required = false) MultipartFile file){
-        Paper paper = authService.sendPaper(request,file);
-        return ResponseEntity.ok(paper);
-    }
-
-    @PostMapping("/myPaper")
-    public ResponseEntity<?> myPaper(@RequestBody MyPaperRequest request){
-        MyPaperResponse response = new MyPaperResponse();
-        authService.myPaper(request.getUsername(),request.getConferenceFullname(),response);
-
-        return ResponseEntity.ok(response);
-    }
     /**
      * This is a function to test your connectivity.
      */
