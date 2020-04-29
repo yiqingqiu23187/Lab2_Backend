@@ -45,12 +45,20 @@ public class ChairService {
     public Conference applyConfer(String username,ApplyConferenceRequest request) throws ConferHasBeenRegisteredException {
         if(conferenceRepository.findByFullName(request.getFullName()) != null)
             throw new ConferHasBeenRegisteredException(request.getFullName());
+
         User user = userRepository.findByUsername(username);
         user.getConferenceFullname().add(request.getFullName());
         userRepository.save(user);
+
+        System.out.println(request.getTopics().size());//To test
+        ArrayList<String> topics = new ArrayList<>();
+        for (int i = 0;i < request.getTopics().size();i++){
+            topics.add(request.getTopics().get(i).getValue());
+        }
+
         Conference conference = new Conference(request.getAbbr(),request.getFullName(),
                 request.getHoldDate(),request.getHoldPlace(),request.getSubmissionDeadline(),
-                request.getReleaseDate(),request.getUsername(),false,0);
+                request.getReleaseDate(),request.getUsername(),false,0,topics);
         conferenceRepository.save(conference);
         return conference;
     }

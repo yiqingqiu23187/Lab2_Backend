@@ -10,7 +10,7 @@ import fudan.se.lab2.domain.User;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
 import fudan.se.lab2.exception.ControllerAdvisor;
 import fudan.se.lab2.exception.UNHasBeenRegisteredException;
-import fudan.se.lab2.service.AuthService;
+import fudan.se.lab2.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +29,15 @@ import java.util.Map;
  * @author LBW
  */
 @RestController
-public class AuthController {
+public class UserController {
 
-    private AuthService authService;
+    private UserService userService;
 
-    Logger logger = LoggerFactory.getLogger(AuthController.class);
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
 
@@ -46,7 +46,7 @@ public class AuthController {
         logger.debug("RegistrationForm: " + request.toString());
         User user;
         try {
-            user = authService.register(request);
+            user = userService.register(request);
         }catch (UNHasBeenRegisteredException ex){
             return new ControllerAdvisor().handlerUsernameHasBeenRegisteredException(ex);
         }
@@ -61,8 +61,8 @@ public class AuthController {
         User user;
         String token;
         try {
-            user = authService.login(request.getUsername(),request.getPassword());
-            token= authService.login(request.getUsername());
+            user = userService.login(request.getUsername(),request.getPassword());
+            token= userService.login(request.getUsername());
         }catch (UsernameNotFoundException ex){
             return new ControllerAdvisor().handleUsernameNotFoundException(ex);
         }catch (BadCredentialsException ex){
@@ -80,7 +80,7 @@ public class AuthController {
     @GetMapping("/allConference")
     public  ResponseEntity<?> allConference(){
         AllConferenceResponse response = new AllConferenceResponse();
-        ArrayList<Conference> conferences = authService.findAllConference();
+        ArrayList<Conference> conferences = userService.findAllConference();
         response.setAllConference(conferences);
 
         return ResponseEntity.ok(response);
@@ -90,7 +90,7 @@ public class AuthController {
     public ResponseEntity<?> myConference(@RequestBody MyConferenceRequest request){
 
         MyConferenceResponce responce = new MyConferenceResponce();
-        authService.findMyConference(request.getUsername(),responce);
+        userService.findMyConference(request.getUsername(),responce);
         return ResponseEntity.ok(responce);
     }
 
@@ -99,7 +99,7 @@ public class AuthController {
     @PostMapping("/message")
     public ResponseEntity<?> information(@RequestBody MessageRequest request){
         MessageResponse responce = new MessageResponse();
-        authService.getMessage(request.getUsername(),responce);
+        userService.getMessage(request.getUsername(),responce);
         return ResponseEntity.ok(responce);
     }
 
@@ -107,7 +107,7 @@ public class AuthController {
 
     @PostMapping("/handleInvitation")
     public ResponseEntity<?> handleInvitation(@RequestBody HandleInvitationRequest request){
-        Invitation invitation = authService.handleInvitation(request.getUsername(),request.getConferenceFullname(),request.getAgreeOrNot());
+        Invitation invitation = userService.handleInvitation(request.getUsername(),request.getConferenceFullname(),request.getAgreeOrNot());
 
         return ResponseEntity.ok(invitation);
     }

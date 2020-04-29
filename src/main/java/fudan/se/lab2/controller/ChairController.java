@@ -10,7 +10,6 @@ import fudan.se.lab2.domain.User;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
 import fudan.se.lab2.exception.ControllerAdvisor;
 import fudan.se.lab2.exception.UNHasBeenRegisteredException;
-import fudan.se.lab2.service.AuthService;
 import fudan.se.lab2.service.ChairService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

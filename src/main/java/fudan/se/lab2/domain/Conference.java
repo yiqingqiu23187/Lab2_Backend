@@ -17,6 +17,7 @@ public class Conference {
     private String holdPlace;
     private String submissionDeadline;
     private String releaseDate;
+    private ArrayList<String> topics = new ArrayList<>();
     private Boolean openOrNot;
     private int state;//state:0: To be aproved  1:Audit success   2:Audit failure
 
@@ -65,19 +66,31 @@ public class Conference {
         this.PCMembers = PCMembers;
     }
 
-    public Conference(){}
-    public Conference( String abbr, String fullName, String holdDate, String holdPlace, String submissionDeadline,
-             String releaseDate, String chair,Boolean openOrNot,int state){
+    public Conference() {
+    }
+
+    public Conference(String abbr, String fullName, String holdDate, String holdPlace, String submissionDeadline,
+                      String releaseDate, String chair, Boolean openOrNot, int state,ArrayList<String> topics) {
         this.abbr = abbr;
         this.fullName = fullName;
         this.holdDate = holdDate;
         this.holdPlace = holdPlace;
+        this.topics = topics;
         this.submissionDeadline = submissionDeadline;
         this.releaseDate = releaseDate;
-        this.chair=chair;
+        this.chair = chair;
         this.state = state;
-        this.openOrNot=openOrNot;
+        this.openOrNot = openOrNot;
     }
+
+    public ArrayList<String> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(ArrayList<String> topics) {
+        this.topics = topics;
+    }
+
     public Long getId() {
         return id;
     }

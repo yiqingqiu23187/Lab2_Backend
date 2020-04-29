@@ -3,15 +3,7 @@ package fudan.se.lab2.controller;
 import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.controller.request.MyConferenceRequest;
 import fudan.se.lab2.controller.response.*;
-import fudan.se.lab2.domain.Conference;
-import fudan.se.lab2.domain.Invitation;
-import fudan.se.lab2.domain.Paper;
-import fudan.se.lab2.domain.User;
-import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
-import fudan.se.lab2.exception.ControllerAdvisor;
-import fudan.se.lab2.exception.UNHasBeenRegisteredException;
-import fudan.se.lab2.service.AuthService;
-import fudan.se.lab2.service.PCMemberService;
+
 import fudan.se.lab2.service.PCMemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

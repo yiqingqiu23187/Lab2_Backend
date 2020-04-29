@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * @author LBW
  */
 @Service
-public class AuthService {
+public class UserService {
     private UserRepository userRepository;
     private ConferenceRepository conferenceRepository;
     private InvitationRepository invitationRepository;
@@ -35,7 +35,7 @@ public class AuthService {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public AuthService(UserRepository userRepository, AuthorityRepository authorityRepository,
+    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository,
                        ConferenceRepository conferenceRepository, InvitationRepository invitationRepository, PaperRepository paperRepository, JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.conferenceRepository = conferenceRepository;
@@ -86,7 +86,8 @@ public class AuthService {
         ArrayList<String> conferenceFullname = user.getConferenceFullname();
         for (String each : conferenceFullname) {
             Conference conference = conferenceRepository.findByFullName(each);
-            if (conference.getChair().equals(username)) responce.getChairConference().add(conference);
+            if (conference.getChair().equals(username) && conference.getState() == 1)
+                responce.getChairConference().add(conference);
             if (conference.getPCMembers().contains(username)) responce.getPCConference().add(conference);
             if (conference.getAuthor().contains(username)) responce.getAuthorConference().add(conference);
         }
@@ -98,7 +99,7 @@ public class AuthService {
         ArrayList<Invitation> invitations = new ArrayList<>();
         Iterable<Invitation> invitations1 = invitationRepository.findByInvitedParty(username);
         for (Invitation each : invitations1) {
-            invitations.add(each);
+            if (each.getState() == 0) invitations.add(each);
         }
 
         ArrayList<Conference> invitation = new ArrayList<>();

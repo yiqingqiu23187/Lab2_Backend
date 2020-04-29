@@ -73,7 +73,10 @@ public class AdminService {
 
     public Conference handleConference(String conferenceFullname,Boolean agreeOrNot){
         Conference conference = conferenceRepository.findByFullName(conferenceFullname);
-        if (agreeOrNot)conference.setState(1);
+        if (agreeOrNot){
+            conference.setState(1);
+            conference.getPCMembers().add(conference.getChair());
+        }
         else conference.setState(2);
         conferenceRepository.save(conference);
         return conference;

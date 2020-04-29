@@ -1,5 +1,7 @@
 package fudan.se.lab2.controller.request;
 
+import java.util.ArrayList;
+
 public class ApplyConferenceRequest {
     private String abbr;
     private String fullName;
@@ -8,6 +10,27 @@ public class ApplyConferenceRequest {
     private String submissionDeadline;
     private String releaseDate;
     private String username;
+    private ArrayList<topic> topics;
+
+    public class topic{
+        String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
+    public ArrayList<topic> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(ArrayList<topic> topics) {
+        this.topics = topics;
+    }
 
     public String getUsername() {
         return username;

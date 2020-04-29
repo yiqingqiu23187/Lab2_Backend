@@ -1,9 +1,12 @@
 package fudan.se.lab2.controller.request;
 
+import java.util.ArrayList;
+
 public class HandleInvitationRequest {
     String username;
     String conferenceFullname;
     Boolean agreeOrNot;
+    ArrayList<String> topics = new ArrayList<>();
 
     public String getUsername() {
         return username;
