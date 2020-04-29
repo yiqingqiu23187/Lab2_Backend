@@ -38,11 +38,26 @@ public class ChairController {
     }
 
     @PostMapping("/applyConference")
-    public ResponseEntity<?> applyConfer(@RequestBody ApplyConferenceRequest request){
-        logger.debug("ApplyForm: " + request.toString());
+    public ResponseEntity<?> applyConfer(HttpServletRequest httpServletRequest,@RequestParam(value = "topics") TempTopic[] topics){
+
         Conference conference;
+        ApplyConferenceRequest request = new ApplyConferenceRequest();
+        request.setAbbr(httpServletRequest.getParameter("abbr"));
+        request.setFullName(httpServletRequest.getParameter("fullName"));
+        request.setHoldDate(httpServletRequest.getParameter("holdDate"));
+        request.setHoldPlace(httpServletRequest.getParameter("holdPlace"));
+        request.setSubmissionDeadline(httpServletRequest.getParameter("submissionDeadline"));
+        request.setReleaseDate(httpServletRequest.getParameter("releaseDate"));
+        request.setUsername(httpServletRequest.getParameter("username"));
+        logger.debug("ApplyForm: " + request.toString());
+
+        System.out.println(topics.length);//To test
+        ArrayList<String> tempTopics = new ArrayList<>();
+        for (int i = 0;i < topics.length;i++){
+            tempTopics.add(topics[i].getValue());
+        }
         try {
-            conference = chairService.applyConfer(request.getUsername(),request);
+            conference = chairService.applyConfer(request.getUsername(),request,tempTopics);
         }catch (ConferHasBeenRegisteredException ex){
             return new ControllerAdvisor().handleConferHasBeenRegisteredException(ex);
         }
