@@ -4,6 +4,7 @@ import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.controller.request.MyConferenceRequest;
 import fudan.se.lab2.controller.response.*;
 
+import fudan.se.lab2.domain.Invitation;
 import fudan.se.lab2.service.PCMemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +23,20 @@ import java.util.Map;
 
 @RestController
 public class PCMemberController {
-    private PCMemberService PCMemberService;
+    private PCMemberService pcMemberService;
 
     Logger logger = LoggerFactory.getLogger( PCMemberService.class);
 
     @Autowired
     public PCMemberController( PCMemberService PCMemberService) {
-        this. PCMemberService = PCMemberService;
+        this.pcMemberService = PCMemberService;
     }
+
+    @PostMapping("/handleInvitation")
+    public ResponseEntity<?> handleInvitation(@RequestBody HandleInvitationRequest request){
+        Invitation invitation = pcMemberService.handleInvitation(request.getUsername(),request.getConferenceFullname(),request.getAgreeOrNot(),request.getTopics());
+
+        return ResponseEntity.ok(invitation);
+    }
+
 }

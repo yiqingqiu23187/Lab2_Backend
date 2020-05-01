@@ -14,6 +14,7 @@ import fudan.se.lab2.service.ChairService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,23 +39,14 @@ public class ChairController {
     }
 
     @PostMapping("/applyConference")
-    public ResponseEntity<?> applyConfer(HttpServletRequest httpServletRequest,@RequestParam(value = "topics") TempTopic[] topics){
+    public ResponseEntity<?> applyConfer(@RequestBody ApplyConferenceRequest request){
+        logger.debug("ApplyForm: " +  request.toString());
 
         Conference conference;
-        ApplyConferenceRequest request = new ApplyConferenceRequest();
-        request.setAbbr(httpServletRequest.getParameter("abbr"));
-        request.setFullName(httpServletRequest.getParameter("fullName"));
-        request.setHoldDate(httpServletRequest.getParameter("holdDate"));
-        request.setHoldPlace(httpServletRequest.getParameter("holdPlace"));
-        request.setSubmissionDeadline(httpServletRequest.getParameter("submissionDeadline"));
-        request.setReleaseDate(httpServletRequest.getParameter("releaseDate"));
-        request.setUsername(httpServletRequest.getParameter("username"));
-        logger.debug("ApplyForm: " + request.toString());
-
-        System.out.println(topics.length);//To test
+        //System.out.println(topics.length);//To test
         ArrayList<String> tempTopics = new ArrayList<>();
-        for (int i = 0;i < topics.length;i++){
-            tempTopics.add(topics[i].getValue());
+        for (int i = 0;i <  request.getTopics().length;i++){
+            tempTopics.add(request.getTopics()[i].get("value"));
         }
         try {
             conference = chairService.applyConfer(request.getUsername(),request,tempTopics);
@@ -63,6 +55,7 @@ public class ChairController {
         }
         return ResponseEntity.ok(conference);
     }
+
 
 
     @GetMapping("/getAllUser")
@@ -88,5 +81,11 @@ public class ChairController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/openMark")
+    public  ResponseEntity<?> openMark(@RequestBody OpenMarkRequest request){
+
+        Conference conference = chairService.openMark(request.getConferenceFullname(),request.getMarkable());
+        return ResponseEntity.ok(conference);
+    }
 
 }

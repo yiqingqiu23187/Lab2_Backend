@@ -2,10 +2,7 @@ package fudan.se.lab2.service;
 
 import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.controller.response.*;
-import fudan.se.lab2.domain.Conference;
-import fudan.se.lab2.domain.Invitation;
-import fudan.se.lab2.domain.Paper;
-import fudan.se.lab2.domain.User;
+import fudan.se.lab2.domain.*;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
 import fudan.se.lab2.exception.UNHasBeenRegisteredException;
 import fudan.se.lab2.repository.*;
@@ -32,13 +29,48 @@ public class PCMemberService {
     private ConferenceRepository conferenceRepository;
     private InvitationRepository invitationRepository;
     private PaperRepository paperRepository;
+    private DistributionRepository distributionRepository;
 
     @Autowired
     public PCMemberService(UserRepository userRepository, AuthorityRepository authorityRepository,
-                        ConferenceRepository conferenceRepository, InvitationRepository invitationRepository, PaperRepository paperRepository, JwtTokenUtil jwtTokenUtil) {
+                        ConferenceRepository conferenceRepository, InvitationRepository invitationRepository,
+                           PaperRepository paperRepository,DistributionRepository distributionRepository) {
         this.userRepository = userRepository;
         this.conferenceRepository = conferenceRepository;
         this.invitationRepository = invitationRepository;
         this.paperRepository = paperRepository;
+        this.distributionRepository = distributionRepository;
+    }
+
+    public Invitation handleInvitation(String username, String conferenceFullname,
+                                       Boolean agreeOrNot,ArrayList<String> topics) {
+        Invitation invitation = invitationRepository.
+                findByInvitedPartyAndConferenceFullname(username, conferenceFullname);
+        if (invitation != null) {
+            if (agreeOrNot) {
+                invitation.setState(1);
+                invitationRepository.save(invitation);
+
+                Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+                conference.getPCMembers().add(username);
+                conferenceRepository.save(conference);
+
+                User user = userRepository.findByUsername(username);
+                user.getConferenceFullname().add(conferenceFullname);
+                userRepository.save(user);
+
+                Distribution distribution = new Distribution();
+                distribution.setUserName(username);
+                distribution.setConferenceFullname(conferenceFullname);
+                distribution.setTopics(topics);
+                distributionRepository.save(distribution);
+            } else {
+                invitation.setState(2);
+                invitationRepository.save(invitation);
+            }
+        } else {
+            System.out.println("this conference dose not exist");
+        }
+        return invitation;
     }
 }

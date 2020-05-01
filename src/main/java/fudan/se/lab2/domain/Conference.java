@@ -24,6 +24,15 @@ public class Conference {
     private String chair;
     private ArrayList<String> PCMembers = new ArrayList<>();
     private ArrayList<String> authors = new ArrayList<>();
+    private Boolean markable;
+
+    public Boolean getMarkable() {
+        return markable;
+    }
+
+    public void setMarkable(Boolean markable) {
+        this.markable = markable;
+    }
 
     public Boolean getOpenOrNot() {
         return openOrNot;

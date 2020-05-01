@@ -1,6 +1,7 @@
 package fudan.se.lab2.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 
 @Entity
 public class Paper {
@@ -12,6 +13,51 @@ public class Paper {
     private String conferenceFullname;
     private String title;
     private String summary;
+    private ArrayList<String> writerEmail = new ArrayList<>();
+    private ArrayList<String> writerName = new ArrayList<>();
+    private ArrayList<String> writerJob = new ArrayList<>();
+    private ArrayList<String> writerAddress =new ArrayList<>();
+    private ArrayList<String> topics = new ArrayList<>();
+
+    public ArrayList<String> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(ArrayList<String> topics) {
+        this.topics = topics;
+    }
+
+    public ArrayList<String> getWriterEmail() {
+        return writerEmail;
+    }
+
+    public void setWriterEmail(ArrayList<String> writerEmail) {
+        this.writerEmail = writerEmail;
+    }
+
+    public ArrayList<String> getWriterName() {
+        return writerName;
+    }
+
+    public void setWriterName(ArrayList<String> writerName) {
+        this.writerName = writerName;
+    }
+
+    public ArrayList<String> getWriterJob() {
+        return writerJob;
+    }
+
+    public void setWriterJob(ArrayList<String> writerJob) {
+        this.writerJob = writerJob;
+    }
+
+    public ArrayList<String> getWriterAddress() {
+        return writerAddress;
+    }
+
+    public void setWriterAddress(ArrayList<String> writerAddress) {
+        this.writerAddress = writerAddress;
+    }
 
     public String getUsername() {
         return username;

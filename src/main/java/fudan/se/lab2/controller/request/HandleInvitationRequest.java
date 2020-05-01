@@ -8,6 +8,14 @@ public class HandleInvitationRequest {
     Boolean agreeOrNot;
     ArrayList<String> topics = new ArrayList<>();
 
+    public ArrayList<String> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(ArrayList<String> topics) {
+        this.topics = topics;
+    }
+
     public String getUsername() {
         return username;
     }

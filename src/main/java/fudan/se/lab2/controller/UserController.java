@@ -105,12 +105,7 @@ public class UserController {
 
 
 
-    @PostMapping("/handleInvitation")
-    public ResponseEntity<?> handleInvitation(@RequestBody HandleInvitationRequest request){
-        Invitation invitation = userService.handleInvitation(request.getUsername(),request.getConferenceFullname(),request.getAgreeOrNot());
 
-        return ResponseEntity.ok(invitation);
-    }
 
 
     /**

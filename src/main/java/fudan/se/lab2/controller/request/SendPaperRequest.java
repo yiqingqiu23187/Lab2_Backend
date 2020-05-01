@@ -2,12 +2,59 @@ package fudan.se.lab2.controller.request;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+
 public class SendPaperRequest {
     String username;
     String conferenceFullname;
     String title;
     String summary;
-    MultipartFile file;
+    private ArrayList<String> writerEmail;
+    private ArrayList<String> writerName;
+    private ArrayList<String> writerJob;
+    private ArrayList<String> writerAddress;
+    private ArrayList<String> topics;
+
+    public ArrayList<String> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(ArrayList<String> topics) {
+        this.topics = topics;
+    }
+
+    public ArrayList<String> getWriterEmail() {
+        return writerEmail;
+    }
+
+    public void setWriterEmail(ArrayList<String> writerEmail) {
+        this.writerEmail = writerEmail;
+    }
+
+    public ArrayList<String> getWriterName() {
+        return writerName;
+    }
+
+    public void setWriterName(ArrayList<String> writerName) {
+        this.writerName = writerName;
+    }
+
+    public ArrayList<String> getWriterJob() {
+        return writerJob;
+    }
+
+    public void setWriterJob(ArrayList<String> writerJob) {
+        this.writerJob = writerJob;
+    }
+
+    public ArrayList<String> getWriterAddress() {
+        return writerAddress;
+    }
+
+    public void setWriterAddress(ArrayList<String> writerAddress) {
+        this.writerAddress = writerAddress;
+    }
 
     public String getUsername() {
         return username;
@@ -41,11 +88,4 @@ public class SendPaperRequest {
         this.summary = summary;
     }
 
-    public MultipartFile getFile() {
-        return file;
-    }
-
-    public void setFile(MultipartFile file) {
-        this.file = file;
-    }
 }

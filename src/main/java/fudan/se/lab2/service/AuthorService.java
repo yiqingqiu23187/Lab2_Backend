@@ -1,26 +1,17 @@
 package fudan.se.lab2.service;
 
-import fudan.se.lab2.controller.request.*;
+
 import fudan.se.lab2.controller.response.*;
 import fudan.se.lab2.domain.Conference;
-import fudan.se.lab2.domain.Invitation;
 import fudan.se.lab2.domain.Paper;
-import fudan.se.lab2.domain.User;
-import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
-import fudan.se.lab2.exception.UNHasBeenRegisteredException;
 import fudan.se.lab2.repository.*;
 import fudan.se.lab2.security.jwt.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.servlet.http.HttpServletRequest;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -43,38 +34,50 @@ public class AuthorService {
     }
 
 
-    public Paper sendPaper(HttpServletRequest request, MultipartFile file) {
-        Paper paper = new Paper();
-        paper.setUsername(request.getParameter("username"));
-        paper.setConferenceFullname(request.getParameter("conferenceFullname"));
-        paper.setTitle(request.getParameter("title"));
-        paper.setSummary(request.getParameter("summary"));
+    public Paper sendPaper(String username,String conferenceFullname,String title,String summary,ArrayList<String> writerName,
+                           ArrayList<String>writerEmail,ArrayList<String> writerJob,ArrayList<String> writerAddress,
+                           ArrayList<String> topics,MultipartFile file) {
+        Paper paper = paperRepository.findByUsernameAndConferenceFullnameAndTitle(username,conferenceFullname,title);
+        if (paper == null) paper = new Paper();
+        paper.setUsername(username);
+        paper.setConferenceFullname(conferenceFullname);
+        paper.setTitle(title);
+        paper.setSummary(summary);
+        paper.setWriterAddress(writerAddress);
+        paper.setWriterEmail(writerEmail);
+        paper.setWriterJob(writerJob);
+        paper.setWriterName(writerName);
+        paper.setTitle(title);
+        paper.setTopics(topics);
         paperRepository.save(paper);//save paper
 
-        Conference conference = conferenceRepository.findByFullName(request.getParameter("conferenceFullname"));
-        if (!conference.getAuthors().contains(request.getParameter("username")))
-            conference.getAuthors().add(request.getParameter("username"));
+        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+        if (!conference.getAuthors().contains(username))
+            conference.getAuthors().add(username);
         conferenceRepository.save(conference);//save author
 
         //store paper
         //Notice!!!!
-        String pathName = "/usr/local/paper/";//you should use this line if the backend runs on dcloud
-        //String pathName = "C:/Users/  yourAccount  /Desktop";//you should use this line and choose a path if the backend runs locally
+        String pathName = "/usr/local/paper/"+username+"/";//you should use this line if the backend runs on dcloud
+        //String pathName = "C:/Users/  yourAccount  /Desktop/test/";//you should use this line and choose a path if the backend runs locally
+
+        File temp = new File(pathName);
+        if (!temp.exists()){
+            temp.mkdirs();
+        }
         String pname = file.getOriginalFilename();
         pathName += pname;
-        FileOutputStream fos = null;
+
+
+
+
         try {
-            fos = new FileOutputStream(pathName);
-            fos.write(file.getBytes()); // 写入文件
+            File out = new File(pathName);
+            if (out.exists() && out.isFile()) out.delete();//如果文件存在，则先删除;
+            file.transferTo(out);// 写入文件
             //System.out.println("文件上传成功");
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return paper;
     }

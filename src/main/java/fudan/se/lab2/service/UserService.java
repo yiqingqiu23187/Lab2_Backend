@@ -118,28 +118,7 @@ public class UserService {
     }
 
 
-    public Invitation handleInvitation(String username, String conferenceFullname, Boolean agreeOrNot) {
-        Invitation invitation = invitationRepository.
-                findByInvitedPartyAndConferenceFullname(username, conferenceFullname);
-        if (invitation != null) {
-            if (agreeOrNot) {
-                invitation.setState(1);
-                invitationRepository.save(invitation);
-                Conference conference = conferenceRepository.findByFullName(conferenceFullname);
-                conference.getPCMembers().add(username);
-                conferenceRepository.save(conference);
-                User user = userRepository.findByUsername(username);
-                user.getConferenceFullname().add(conferenceFullname);
-                userRepository.save(user);
-            } else {
-                invitation.setState(2);
-                invitationRepository.save(invitation);
-            }
-        } else {
-            System.out.println("this conference dose not exist");
-        }
-        return invitation;
-    }
+
 
 
 }

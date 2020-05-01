@@ -1,6 +1,7 @@
 package fudan.se.lab2.controller.request;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class ApplyConferenceRequest {
     private String abbr;
@@ -10,27 +11,16 @@ public class ApplyConferenceRequest {
     private String submissionDeadline;
     private String releaseDate;
     private String username;
-    //private ArrayList<topic> topics;
+    private Map<String,String>[] topics;
 
-//    public class topic{
-//        String value;
-//
-//        public String getValue() {
-//            return value;
-//        }
-//
-//        public void setValue(String value) {
-//            this.value = value;
-//        }
-//    }
+    public Map<String,String>[] getTopics() {
+        return topics;
+    }
 
-//    public ArrayList<topic> getTopics() {
-//        return topics;
-//    }
-//
-//    public void setTopics(ArrayList<topic> topics) {
-//        this.topics = topics;
-//    }
+    public void setTopics(Map<String,String>[] topics) {
+        this.topics = topics;
+    }
+
 
     public String getUsername() {
         return username;

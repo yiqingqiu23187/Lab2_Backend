@@ -91,4 +91,11 @@ public class ChairService {
             System.out.println("Conference's chair is not the current user");
         }
     }
+
+    public Conference openMark(String conferenceFullname,Boolean markable){
+        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+        conference.setMarkable(markable);
+        conferenceRepository.save(conference);
+        return conference;
+    }
 }
