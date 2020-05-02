@@ -18,7 +18,7 @@ public class Conference {
     private String submissionDeadline;
     private String releaseDate;
     private ArrayList<String> topics = new ArrayList<>();
-    private Boolean openOrNot;
+    private Boolean openOrNot = false;
     private int state;//state:0: To be aproved  1:Audit success   2:Audit failure
 
     private String chair;

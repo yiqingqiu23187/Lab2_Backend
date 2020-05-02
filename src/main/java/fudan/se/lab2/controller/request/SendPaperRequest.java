@@ -1,8 +1,6 @@
 package fudan.se.lab2.controller.request;
 
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 public class SendPaperRequest {

@@ -95,7 +95,10 @@ public class ChairService {
     public Conference openMark(String conferenceFullname,Boolean markable){
         Conference conference = conferenceRepository.findByFullName(conferenceFullname);
         conference.setMarkable(markable);
+        conference.setOpenOrNot(false);
         conferenceRepository.save(conference);
+
+     //   ArrayList<String> pc
         return conference;
     }
 }

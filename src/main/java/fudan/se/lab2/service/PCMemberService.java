@@ -60,7 +60,7 @@ public class PCMemberService {
                 userRepository.save(user);
 
                 Distribution distribution = new Distribution();
-                distribution.setUserName(username);
+                distribution.setUsername(username);
                 distribution.setConferenceFullname(conferenceFullname);
                 distribution.setTopics(topics);
                 distributionRepository.save(distribution);

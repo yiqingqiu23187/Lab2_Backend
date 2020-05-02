@@ -40,17 +40,24 @@ public class AuthorController {
     }
 
 
+    @PostMapping("/sendFile")
+    public ResponseEntity<?> sendFile(@RequestParam(value = "username")String username,@RequestParam(value = "file", required = false) MultipartFile file){
+        authorService.sendFile(username,file);
+        return ResponseEntity.ok("ok");
+    }
 
     @PostMapping("/sendPaper")
-    public ResponseEntity<?> sendPaper(@RequestBody SendPaperRequest request,@RequestParam(value = "file", required = false) MultipartFile file){
-        Paper paper = authorService.sendPaper(request.getUsername(),request.getConferenceFullname(),request.getTitle(),request.getSummary(),
-                request.getTopics(),request.getWriterEmail(),request.getWriterJob(),request.getWriterAddress(),request.getTopics(),file); return ResponseEntity.ok(paper);
+    public ResponseEntity<?> sendPaper(@RequestBody SendPaperRequest request){
+        Paper paper = authorService.sendPaper(request.getUsername(),request.getConferenceFullname(),request.getTitle(),
+                request.getSummary(),request.getWriterName(), request.getWriterEmail(),
+                request.getWriterJob(),request.getWriterAddress(), request.getTopics()) ;
+        return ResponseEntity.ok(paper);
     }
 
     @PostMapping("/updatePaper")
-    public ResponseEntity<?> updatePaper(@RequestBody SendPaperRequest request,@RequestParam(value = "file", required = false) MultipartFile file){
+    public ResponseEntity<?> updatePaper(@RequestBody SendPaperRequest request){
         Paper paper = authorService.sendPaper(request.getUsername(),request.getConferenceFullname(),request.getTitle(),request.getSummary(),
-                request.getTopics(),request.getWriterEmail(),request.getWriterJob(),request.getWriterAddress(),request.getTopics(),file);
+                request.getTopics(),request.getWriterEmail(),request.getWriterJob(),request.getWriterAddress(),request.getTopics());
         return ResponseEntity.ok(paper);
     }
 

@@ -10,7 +10,7 @@ public class Distribution {
     private Long id;
 
     @Column(unique = true)
-    private String userName;
+    private String username;
 
     @Column(unique = true)
     private String conferenceFullname;
@@ -18,12 +18,12 @@ public class Distribution {
     private ArrayList<String> topics = new ArrayList<>();
     private ArrayList<String> paperTitles = new ArrayList<>();
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 
     public String getConferenceFullname() {

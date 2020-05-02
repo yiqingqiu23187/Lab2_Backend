@@ -34,28 +34,7 @@ public class AuthorService {
     }
 
 
-    public Paper sendPaper(String username,String conferenceFullname,String title,String summary,ArrayList<String> writerName,
-                           ArrayList<String>writerEmail,ArrayList<String> writerJob,ArrayList<String> writerAddress,
-                           ArrayList<String> topics,MultipartFile file) {
-        Paper paper = paperRepository.findByUsernameAndConferenceFullnameAndTitle(username,conferenceFullname,title);
-        if (paper == null) paper = new Paper();
-        paper.setUsername(username);
-        paper.setConferenceFullname(conferenceFullname);
-        paper.setTitle(title);
-        paper.setSummary(summary);
-        paper.setWriterAddress(writerAddress);
-        paper.setWriterEmail(writerEmail);
-        paper.setWriterJob(writerJob);
-        paper.setWriterName(writerName);
-        paper.setTitle(title);
-        paper.setTopics(topics);
-        paperRepository.save(paper);//save paper
-
-        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
-        if (!conference.getAuthors().contains(username))
-            conference.getAuthors().add(username);
-        conferenceRepository.save(conference);//save author
-
+    public void sendFile(String username,MultipartFile file){
         //store paper
         //Notice!!!!
         String pathName = "/usr/local/paper/"+username+"/";//you should use this line if the backend runs on dcloud
@@ -79,6 +58,32 @@ public class AuthorService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public Paper sendPaper(String username,String conferenceFullname,String title,String summary,ArrayList<String> writerName,
+                           ArrayList<String>writerEmail,ArrayList<String> writerJob,ArrayList<String> writerAddress,
+                           ArrayList<String> topics) {
+        Paper paper = paperRepository.findByUsernameAndConferenceFullnameAndTitle(username,conferenceFullname,title);
+        if (paper == null) paper = new Paper();
+        paper.setUsername(username);
+        paper.setConferenceFullname(conferenceFullname);
+        paper.setTitle(title);
+        paper.setSummary(summary);
+        paper.setWriterAddress(writerAddress);
+        paper.setWriterEmail(writerEmail);
+        paper.setWriterJob(writerJob);
+        paper.setWriterName(writerName);
+        paper.setTitle(title);
+        paper.setTopics(topics);
+        paperRepository.save(paper);//save paper
+
+        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+        if (!conference.getAuthors().contains(username))
+            conference.getAuthors().add(username);
+        conferenceRepository.save(conference);//save author
+
+
         return paper;
     }
 
