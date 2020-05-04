@@ -3,7 +3,7 @@ package fudan.se.lab2.controller.request;
 public class OpenMarkRequest {
     private String conferenceFullname;
     private Boolean markable;
-    private String strategy;
+    private String strategy;//"0" for the simple strategy
 
 
     public String getStrategy() {

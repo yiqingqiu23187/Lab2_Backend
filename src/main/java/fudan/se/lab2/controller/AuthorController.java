@@ -48,18 +48,12 @@ public class AuthorController {
 
     @PostMapping("/sendPaper")
     public ResponseEntity<?> sendPaper(@RequestBody SendPaperRequest request){
-        Paper paper = authorService.sendPaper(request.getUsername(),request.getConferenceFullname(),request.getTitle(),
+        Paper paper = authorService.sendPaper(request.getId(),request.getUsername(),request.getConferenceFullname(),request.getTitle(),
                 request.getSummary(),request.getWriterName(), request.getWriterEmail(),
                 request.getWriterJob(),request.getWriterAddress(), request.getTopics()) ;
         return ResponseEntity.ok(paper);
     }
 
-    @PostMapping("/updatePaper")
-    public ResponseEntity<?> updatePaper(@RequestBody SendPaperRequest request){
-        Paper paper = authorService.sendPaper(request.getUsername(),request.getConferenceFullname(),request.getTitle(),request.getSummary(),
-                request.getTopics(),request.getWriterEmail(),request.getWriterJob(),request.getWriterAddress(),request.getTopics());
-        return ResponseEntity.ok(paper);
-    }
 
     @PostMapping("/myPaper")
     public ResponseEntity<?> myPaper(@RequestBody MyPaperRequest request){

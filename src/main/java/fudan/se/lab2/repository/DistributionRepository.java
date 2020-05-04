@@ -12,5 +12,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DistributionRepository extends CrudRepository<Distribution, Long> {
-    User findByUsername(String username);
+    Distribution findByUsernameAndConferenceFullname(String username,String conferenceFullname);
+
 }

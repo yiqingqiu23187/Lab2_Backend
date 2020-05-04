@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 @Repository
 public interface PaperRepository extends CrudRepository<Paper, Long> {
-    Paper findByUsername(String username);
+    Paper findByID(Long id);
     Iterable<Paper> findByUsernameAndConferenceFullname(String username,String conferenceFullname);
+    Iterable<Paper> findByConferenceFullname(String conferenceFullname);
     Paper findByUsernameAndConferenceFullnameAndTitle(String username,String conferenceFullname,String title);
 }

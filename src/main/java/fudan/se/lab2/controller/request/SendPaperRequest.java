@@ -4,6 +4,7 @@ package fudan.se.lab2.controller.request;
 import java.util.ArrayList;
 
 public class SendPaperRequest {
+    Long id = null;
     String username;
     String conferenceFullname;
     String title;
@@ -13,6 +14,14 @@ public class SendPaperRequest {
     private ArrayList<String> writerJob;
     private ArrayList<String> writerAddress;
     private ArrayList<String> topics;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public ArrayList<String> getTopics() {
         return topics;

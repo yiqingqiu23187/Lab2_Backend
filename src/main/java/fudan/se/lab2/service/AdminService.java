@@ -3,10 +3,7 @@ package fudan.se.lab2.service;
 
 import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.controller.response.*;
-import fudan.se.lab2.domain.Conference;
-import fudan.se.lab2.domain.Invitation;
-import fudan.se.lab2.domain.Paper;
-import fudan.se.lab2.domain.User;
+import fudan.se.lab2.domain.*;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
 import fudan.se.lab2.exception.UNHasBeenRegisteredException;
 import fudan.se.lab2.repository.*;
@@ -33,13 +30,15 @@ public class AdminService {
     private ConferenceRepository conferenceRepository;
     private InvitationRepository invitationRepository;
     private PaperRepository paperRepository;
+    private DistributionRepository distributionRepository;
 
 
     @Autowired
-    public AdminService(UserRepository userRepository, AuthorityRepository authorityRepository,
+    public AdminService(UserRepository userRepository, DistributionRepository distributionRepository,
                        ConferenceRepository conferenceRepository, InvitationRepository invitationRepository, PaperRepository paperRepository, JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.conferenceRepository = conferenceRepository;
+        this.distributionRepository = distributionRepository;
         this.invitationRepository = invitationRepository;
         this.paperRepository = paperRepository;
 
@@ -76,6 +75,12 @@ public class AdminService {
         if (agreeOrNot){
             conference.setState(1);
             conference.getPCMembers().add(conference.getChair());
+
+            Distribution distribution = new Distribution();
+            distribution.setUsername(conference.getChair());
+            distribution.setConferenceFullname(conferenceFullname);
+            distribution.setTopics(conference.getTopics());
+            distributionRepository.save(distribution);
         }
         else conference.setState(2);
         conferenceRepository.save(conference);
