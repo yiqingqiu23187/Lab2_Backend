@@ -104,16 +104,25 @@ public class ChairService {
         }
         int pcsize = pcmembers.size();
         int papersize = papers.size();
+
+
         if (strategy.equals("0")) {
             for (int i = 0; i < papersize; i++) {
                 String title = papers.get(i).getTitle();
+                Mark mark = new Mark();
+                mark.setPaperTitle(title);
+                mark.setConferenceFullname(conferenceFullname);
                 for (int j = 0; j < 3; j++) {
                     Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(pcmembers.get((3*i+j)%pcsize),conferenceFullname);
+                    mark.getPcmembers().add(pcmembers.get((3*i+j)%pcsize));
+                    mark.getFinish().add(false);
                     distribution.getPaperTitles().add(title);
                     distributionRepository.save(distribution);
                 }
             }
         }
+
+
         else if (strategy.equals("1")){
             for (int i = 0; i < papersize; i++) {
                 String title = papers.get(i).getTitle();

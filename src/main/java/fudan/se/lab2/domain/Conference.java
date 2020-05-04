@@ -24,7 +24,7 @@ public class Conference {
     private String chair;
     private ArrayList<String> PCMembers = new ArrayList<>();
     private ArrayList<String> authors = new ArrayList<>();
-    private Boolean markable;
+    private Boolean markable = false;
 
     public Boolean getMarkable() {
         return markable;

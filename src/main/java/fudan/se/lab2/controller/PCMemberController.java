@@ -3,12 +3,15 @@ package fudan.se.lab2.controller;
 import fudan.se.lab2.controller.request.*;
 
 import fudan.se.lab2.domain.Invitation;
+import fudan.se.lab2.domain.Paper;
 import fudan.se.lab2.service.PCMemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 
 @RestController
@@ -29,5 +32,14 @@ public class PCMemberController {
         return ResponseEntity.ok(invitation);
     }
 
+    @PostMapping("/myDistribution")
+    public ResponseEntity<?> myDistribution(@RequestParam(value = "username") String username){
+        ArrayList<Paper> papers = pcMemberService.myDistribution(username);
+        return ResponseEntity.ok(papers);
+    }
 
+//    @PostMapping("/submitReview")
+//    public ResponseEntity<?> submitReview(@RequestBody SubmitReviewRequest request){
+//
+//    }
 }

@@ -64,7 +64,7 @@ public class AuthorService {
     public Paper sendPaper(Long id,String username,String conferenceFullname,String title,String summary,ArrayList<String> writerName,
                            ArrayList<String>writerEmail,ArrayList<String> writerJob,ArrayList<String> writerAddress,
                            ArrayList<String> topics) {
-        Paper paper = paperRepository.findByID(id);
+        Paper paper = paperRepository.findByid(id);
         if (paper == null) paper = new Paper();
         paper.setUsername(username);
         paper.setConferenceFullname(conferenceFullname);

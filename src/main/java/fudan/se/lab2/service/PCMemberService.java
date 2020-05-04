@@ -73,4 +73,17 @@ public class PCMemberService {
         }
         return invitation;
     }
+
+
+    public ArrayList<Paper> myDistribution(String username){
+        Iterable<Distribution> distributions = distributionRepository.findByUsername(username);
+        ArrayList<Paper> papers = new ArrayList<>();
+        for (Distribution e:distributions){
+            for (String each:e.getPaperTitles()){
+                Paper paper = paperRepository.findByConferenceFullnameAndTitle(e.getConferenceFullname(),each);
+                papers.add(paper);
+            }
+        }
+        return papers;
+    }
 }

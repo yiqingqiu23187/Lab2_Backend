@@ -9,10 +9,7 @@ public class Distribution {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true)
     private String username;
-
-    @Column(unique = true)
     private String conferenceFullname;
 
     private ArrayList<String> topics = new ArrayList<>();

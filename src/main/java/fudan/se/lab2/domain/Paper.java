@@ -19,6 +19,14 @@ public class Paper {
     private ArrayList<String> writerAddress =new ArrayList<>();
     private ArrayList<String> topics = new ArrayList<>();
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public ArrayList<String> getTopics() {
         return topics;
     }
