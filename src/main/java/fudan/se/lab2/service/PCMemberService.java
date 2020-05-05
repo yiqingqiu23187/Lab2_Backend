@@ -1,5 +1,6 @@
 package fudan.se.lab2.service;
 
+import fudan.se.lab2.controller.response.MyPaperResponse;
 import fudan.se.lab2.domain.*;
 import fudan.se.lab2.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,16 +64,22 @@ public class PCMemberService {
     }
 
 
-    public ArrayList<Paper> myDistribution(String username) {
+    public void myDistribution(String username,MyPaperResponse response) {
         Iterable<Distribution> distributions = distributionRepository.findByUsername(username);
         ArrayList<Paper> papers = new ArrayList<>();
+        ArrayList<Boolean> finishs = new ArrayList<>();
         for (Distribution e : distributions) {
             for (String each : e.getPaperTitles()) {
                 Paper paper = paperRepository.findByConferenceFullnameAndTitle(e.getConferenceFullname(), each);
                 papers.add(paper);
+
+                Mark mark = markRepository.findByPaperTitleAndConferenceFullname(each,e.getConferenceFullname());
+                int index = mark.getPcmembers().indexOf(username);
+                finishs.add(mark.getFinish().get(index));
             }
         }
-        return papers;
+        response.setPapers(papers);
+        response.setFinishs(finishs);
     }
 
     public Mark submitMark(String title, String username, String conferenceFullname, int score,

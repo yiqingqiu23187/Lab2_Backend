@@ -37,7 +37,7 @@ public class PCMemberController {
     @PostMapping("/myDistribution")
     public ResponseEntity<?> myDistribution(@RequestBody MyConferenceRequest request){
         MyPaperResponse response = new MyPaperResponse();
-        response.setPapers(pcMemberService.myDistribution(request.getUsername()));
+        pcMemberService.myDistribution(request.getUsername(),response);
         return ResponseEntity.ok(response);
     }
 
