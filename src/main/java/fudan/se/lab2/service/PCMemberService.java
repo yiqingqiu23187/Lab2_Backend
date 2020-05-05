@@ -1,23 +1,9 @@
 package fudan.se.lab2.service;
 
-import fudan.se.lab2.controller.request.*;
-import fudan.se.lab2.controller.response.*;
 import fudan.se.lab2.domain.*;
-import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
-import fudan.se.lab2.exception.UNHasBeenRegisteredException;
 import fudan.se.lab2.repository.*;
-import fudan.se.lab2.security.jwt.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.servlet.http.HttpServletRequest;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -30,12 +16,14 @@ public class PCMemberService {
     private InvitationRepository invitationRepository;
     private PaperRepository paperRepository;
     private DistributionRepository distributionRepository;
+    private MarkRepository markRepository;
 
     @Autowired
-    public PCMemberService(UserRepository userRepository, AuthorityRepository authorityRepository,
-                        ConferenceRepository conferenceRepository, InvitationRepository invitationRepository,
-                           PaperRepository paperRepository,DistributionRepository distributionRepository) {
+    public PCMemberService(UserRepository userRepository, MarkRepository markRepository,
+                           ConferenceRepository conferenceRepository, InvitationRepository invitationRepository,
+                           PaperRepository paperRepository, DistributionRepository distributionRepository) {
         this.userRepository = userRepository;
+        this.markRepository = markRepository;
         this.conferenceRepository = conferenceRepository;
         this.invitationRepository = invitationRepository;
         this.paperRepository = paperRepository;
@@ -43,7 +31,7 @@ public class PCMemberService {
     }
 
     public Invitation handleInvitation(String username, String conferenceFullname,
-                                       Boolean agreeOrNot,ArrayList<String> topics) {
+                                       Boolean agreeOrNot, ArrayList<String> topics) {
         Invitation invitation = invitationRepository.
                 findByInvitedPartyAndConferenceFullname(username, conferenceFullname);
         if (invitation != null) {
@@ -75,15 +63,28 @@ public class PCMemberService {
     }
 
 
-    public ArrayList<Paper> myDistribution(String username){
+    public ArrayList<Paper> myDistribution(String username) {
         Iterable<Distribution> distributions = distributionRepository.findByUsername(username);
         ArrayList<Paper> papers = new ArrayList<>();
-        for (Distribution e:distributions){
-            for (String each:e.getPaperTitles()){
-                Paper paper = paperRepository.findByConferenceFullnameAndTitle(e.getConferenceFullname(),each);
+        for (Distribution e : distributions) {
+            for (String each : e.getPaperTitles()) {
+                Paper paper = paperRepository.findByConferenceFullnameAndTitle(e.getConferenceFullname(), each);
                 papers.add(paper);
             }
         }
         return papers;
+    }
+
+    public Mark submitMark(String title, String username, String conferenceFullname, int score,
+                           int confidence, String describe) {
+        Mark mark =markRepository.findByPaperTitleAndConferenceFullname(title,conferenceFullname);
+        int index = mark.getPcmembers().indexOf(username);
+        mark.getFinish().set(index,true);
+        mark.getScores().set(index,score);
+        mark.getConfidences().set(index,confidence);
+        mark.getDiscribes().set(index,describe);
+        markRepository.save(mark);
+
+        return mark;
     }
 }

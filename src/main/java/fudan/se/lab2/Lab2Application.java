@@ -10,10 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Collections;
-import java.util.HashSet;
-
-
 /**
  * Welcome to 2020 Software Engineering Lab2.
  * This is your first lab to write your own code and build a spring boot application.

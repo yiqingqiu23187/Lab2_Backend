@@ -2,7 +2,9 @@ package fudan.se.lab2.controller;
 
 import fudan.se.lab2.controller.request.*;
 
+import fudan.se.lab2.controller.response.MyPaperResponse;
 import fudan.se.lab2.domain.Invitation;
+import fudan.se.lab2.domain.Mark;
 import fudan.se.lab2.domain.Paper;
 import fudan.se.lab2.service.PCMemberService;
 import org.slf4j.Logger;
@@ -33,13 +35,16 @@ public class PCMemberController {
     }
 
     @PostMapping("/myDistribution")
-    public ResponseEntity<?> myDistribution(@RequestParam(value = "username") String username){
-        ArrayList<Paper> papers = pcMemberService.myDistribution(username);
-        return ResponseEntity.ok(papers);
+    public ResponseEntity<?> myDistribution(@RequestBody MyConferenceRequest request){
+        MyPaperResponse response = new MyPaperResponse();
+        response.setPapers(pcMemberService.myDistribution(request.getUsername()));
+        return ResponseEntity.ok(response);
     }
 
-//    @PostMapping("/submitReview")
-//    public ResponseEntity<?> submitReview(@RequestBody SubmitReviewRequest request){
-//
-//    }
+    @PostMapping("/submitReview")
+    public ResponseEntity<?> submitMark(@RequestBody SubmitReviewRequest request){
+        Mark mark = pcMemberService.submitMark(request.getPaperTitle(),request.getUsername(),request.getConferenceFullname(),request.getScore(),
+                request.getConfidence(),request.getDescribe());
+        return ResponseEntity.ok(mark);
+    }
 }

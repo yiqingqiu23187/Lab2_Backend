@@ -4,25 +4,13 @@ import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.controller.response.*;
 import fudan.se.lab2.domain.*;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
-import fudan.se.lab2.exception.UNHasBeenRegisteredException;
 import fudan.se.lab2.repository.*;
 import fudan.se.lab2.security.jwt.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.servlet.http.HttpServletRequest;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * @author LBW
- */
+
 @Service
 public class ChairService {
     private UserRepository userRepository;
@@ -30,11 +18,14 @@ public class ChairService {
     private InvitationRepository invitationRepository;
     private PaperRepository paperRepository;
     private DistributionRepository distributionRepository;
+    private MarkRepository markRepository;
+
 
     @Autowired
     public ChairService(UserRepository userRepository,DistributionRepository distributionRepository,
-                        ConferenceRepository conferenceRepository, InvitationRepository invitationRepository, PaperRepository paperRepository, JwtTokenUtil jwtTokenUtil) {
+                       MarkRepository markRepository, ConferenceRepository conferenceRepository, InvitationRepository invitationRepository, PaperRepository paperRepository, JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
+        this.markRepository = markRepository;
         this.conferenceRepository = conferenceRepository;
         this.invitationRepository = invitationRepository;
         this.distributionRepository = distributionRepository;
@@ -106,8 +97,10 @@ public class ChairService {
         int papersize = papers.size();
 
 
+
         if (strategy.equals("0")) {
             for (int i = 0; i < papersize; i++) {
+                //generate Mark for each paper
                 String title = papers.get(i).getTitle();
                 Mark mark = new Mark();
                 mark.setPaperTitle(title);
@@ -116,6 +109,8 @@ public class ChairService {
                     Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(pcmembers.get((3*i+j)%pcsize),conferenceFullname);
                     mark.getPcmembers().add(pcmembers.get((3*i+j)%pcsize));
                     mark.getFinish().add(false);
+                    markRepository.save(mark);
+
                     distribution.getPaperTitles().add(title);
                     distributionRepository.save(distribution);
                 }
@@ -138,9 +133,19 @@ public class ChairService {
                         }
                     }
                 }
+
+                //generate Mark for each paper
+                Mark mark = new Mark();
+                mark.setPaperTitle(title);
+                mark.setConferenceFullname(conferenceFullname);
+
                 if (tempPC.size()<3){
                     for (int j = 0; j < 3; j++) {
                         Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(pcmembers.get((3*i+j)%pcsize),conferenceFullname);
+                        mark.getPcmembers().add(pcmembers.get((3*i+j)%pcsize));
+                        mark.getFinish().add(false);
+                        markRepository.save(mark);
+
                         distribution.getPaperTitles().add(title);
                         distributionRepository.save(distribution);
                     }
@@ -148,6 +153,10 @@ public class ChairService {
                     int start = (int)(Math.random()*pcsize);
                     for (int j = 0; j < 3; j++) {
                         Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(tempPC.get((start+j)%pcsize),conferenceFullname);
+                        mark.getPcmembers().add(tempPC.get((start+j)%pcsize));
+                        mark.getFinish().add(false);
+                        markRepository.save(mark);
+
                         distribution.getPaperTitles().add(title);
                         distributionRepository.save(distribution);
                     }
