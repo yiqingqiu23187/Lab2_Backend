@@ -20,11 +20,35 @@ public class Conference {
     private ArrayList<String> topics = new ArrayList<>();
     private Boolean openOrNot = false;
     private int state;//state:0: To be aproved  1:Audit success   2:Audit failure
+    private Boolean markable = false;
+    private Boolean finish = false;
+    private Boolean released = false;
+
 
     private String chair;
     private ArrayList<String> PCMembers = new ArrayList<>();
     private ArrayList<String> authors = new ArrayList<>();
-    private Boolean markable = false;
+
+
+    public Boolean getFinish() {
+        return finish;
+    }
+
+    public void setFinish(Boolean finish) {
+        this.finish = finish;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Boolean getReleased() {
+        return released;
+    }
+
+    public void setReleased(Boolean released) {
+        this.released = released;
+    }
 
     public Boolean getMarkable() {
         return markable;

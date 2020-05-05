@@ -13,11 +13,22 @@ public class Paper {
     private String conferenceFullname;
     private String title;
     private String summary;
+    private Boolean finish = false;
+
+    private ArrayList<String> topics = new ArrayList<>();
     private ArrayList<String> writerEmail = new ArrayList<>();
     private ArrayList<String> writerName = new ArrayList<>();
     private ArrayList<String> writerJob = new ArrayList<>();
     private ArrayList<String> writerAddress =new ArrayList<>();
-    private ArrayList<String> topics = new ArrayList<>();
+
+
+    public Boolean getFinish() {
+        return finish;
+    }
+
+    public void setFinish(Boolean finish) {
+        this.finish = finish;
+    }
 
     public Long getId() {
         return id;

@@ -85,6 +85,23 @@ public class PCMemberService {
         mark.getDiscribes().set(index,describe);
         markRepository.save(mark);
 
+        ArrayList<Boolean> temp = new ArrayList<>();
+        temp.add(true);
+        temp.add(true);
+        temp.add(true);
+        if (mark.getFinish().equals(temp)){
+            Paper paper = paperRepository.findByConferenceFullnameAndTitle(conferenceFullname,title);
+            paper.setFinish(true);
+            paperRepository.save(paper);
+            Iterable<Paper> papers = paperRepository.findByConferenceFullname(conferenceFullname);
+            for (Paper e:papers){
+                if (!e.getFinish())return mark;
+            }
+            Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+            conference.setFinish(true);
+            conferenceRepository.save(conference);
+        }
+
         return mark;
     }
 }

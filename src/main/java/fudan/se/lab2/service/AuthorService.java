@@ -3,6 +3,7 @@ package fudan.se.lab2.service;
 
 import fudan.se.lab2.controller.response.*;
 import fudan.se.lab2.domain.Conference;
+import fudan.se.lab2.domain.Mark;
 import fudan.se.lab2.domain.Paper;
 import fudan.se.lab2.repository.*;
 import fudan.se.lab2.security.jwt.JwtTokenUtil;
@@ -23,11 +24,13 @@ public class AuthorService {
     private ConferenceRepository conferenceRepository;
     private InvitationRepository invitationRepository;
     private PaperRepository paperRepository;
+    private MarkRepository markRepository;
 
     @Autowired
-    public AuthorService(UserRepository userRepository, AuthorityRepository authorityRepository,
+    public AuthorService(UserRepository userRepository, MarkRepository markRepository,
                          ConferenceRepository conferenceRepository, InvitationRepository invitationRepository, PaperRepository paperRepository, JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
+        this.markRepository = markRepository;
         this.conferenceRepository = conferenceRepository;
         this.invitationRepository = invitationRepository;
         this.paperRepository = paperRepository;
@@ -95,5 +98,19 @@ public class AuthorService {
         }
 
         response.setPapers(papers);
+    }
+
+    public ArrayList<Mark> myMark(String username){
+        Iterable<Paper> papers = paperRepository.findByUsername(username);
+        ArrayList<Mark> marks = new ArrayList<>();
+        for (Paper e:papers){
+            if (e.getFinish()){
+                Conference conference = conferenceRepository.findByFullName(e.getConferenceFullname());
+                if (conference.getReleased())marks.add(markRepository.findByPaperTitleAndConferenceFullname(e.getTitle(),conference.getFullName()));
+                else System.out.println("该会议主席仍未发布评审结果");
+            }else System.out.println("该稿件仍未评审完");
+        }
+
+        return marks;
     }
 }

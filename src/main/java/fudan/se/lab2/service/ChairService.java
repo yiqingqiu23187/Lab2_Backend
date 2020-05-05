@@ -166,4 +166,11 @@ public class ChairService {
         }
         return conference;
     }
+
+    public Conference releaseMark(String conferenceFullname){
+        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+        conference.setReleased(true);
+        conferenceRepository.save(conference);
+        return conference;
+    }
 }

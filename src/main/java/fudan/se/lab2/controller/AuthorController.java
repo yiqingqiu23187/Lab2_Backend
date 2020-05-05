@@ -3,10 +3,7 @@ package fudan.se.lab2.controller;
 import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.controller.request.MyConferenceRequest;
 import fudan.se.lab2.controller.response.*;
-import fudan.se.lab2.domain.Conference;
-import fudan.se.lab2.domain.Invitation;
-import fudan.se.lab2.domain.Paper;
-import fudan.se.lab2.domain.User;
+import fudan.se.lab2.domain.*;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
 import fudan.se.lab2.exception.ControllerAdvisor;
 import fudan.se.lab2.exception.UNHasBeenRegisteredException;
@@ -60,6 +57,13 @@ public class AuthorController {
         MyPaperResponse response = new MyPaperResponse();
         authorService.myPaper(request.getUsername(),request.getConferenceFullname(),response);
 
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/myMark")
+    public ResponseEntity<?> myMark(@RequestBody MyConferenceRequest request){
+        MyMarkResponse response = new MyMarkResponse();
+        response.setMarks(authorService.myMark(request.getUsername()));
         return ResponseEntity.ok(response);
     }
 }

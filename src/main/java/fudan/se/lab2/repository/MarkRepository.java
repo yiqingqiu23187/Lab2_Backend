@@ -1,6 +1,5 @@
 package fudan.se.lab2.repository;
 
-import fudan.se.lab2.domain.Conference;
 import fudan.se.lab2.domain.Mark;
 
 
