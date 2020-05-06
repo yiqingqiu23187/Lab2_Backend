@@ -109,6 +109,9 @@ public class ChairService {
                     Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(pcmembers.get((3*i+j)%pcsize),conferenceFullname);
                     mark.getPcmembers().add(pcmembers.get((3*i+j)%pcsize));
                     mark.getFinish().add(false);
+                    mark.getScores().add(0);
+                    mark.getConfidences().add(0);
+                    mark.getDiscribes().add("");
                     markRepository.save(mark);
 
                     distribution.getPaperTitles().add(title);
@@ -144,6 +147,9 @@ public class ChairService {
                         Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(pcmembers.get((3*i+j)%pcsize),conferenceFullname);
                         mark.getPcmembers().add(pcmembers.get((3*i+j)%pcsize));
                         mark.getFinish().add(false);
+                        mark.getScores().add(0);
+                        mark.getConfidences().add(0);
+                        mark.getDiscribes().add("");
                         markRepository.save(mark);
 
                         distribution.getPaperTitles().add(title);
@@ -155,6 +161,9 @@ public class ChairService {
                         Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(tempPC.get((start+j)%pcsize),conferenceFullname);
                         mark.getPcmembers().add(tempPC.get((start+j)%pcsize));
                         mark.getFinish().add(false);
+                        mark.getScores().add(0);
+                        mark.getConfidences().add(0);
+                        mark.getDiscribes().add("");
                         markRepository.save(mark);
 
                         distribution.getPaperTitles().add(title);

@@ -19,7 +19,6 @@ public class Mark {
     private ArrayList<Integer> confidences = new ArrayList<>();
     private ArrayList<String> discribes = new ArrayList<>();
 
-
     public ArrayList<Boolean> getFinish() {
         return finish;
     }
