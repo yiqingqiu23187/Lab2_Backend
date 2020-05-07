@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 
@@ -40,6 +42,12 @@ public class PCMemberController {
         pcMemberService.myDistribution(request.getUsername(),response);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/download")
+    public void download(@RequestParam("id") Long id,HttpServletResponse response){
+        pcMemberService.download(id,response);
+    }
+
 
     @PostMapping("/submitReview")
     public ResponseEntity<?> submitMark(@RequestBody SubmitReviewRequest request){

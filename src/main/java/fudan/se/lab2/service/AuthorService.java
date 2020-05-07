@@ -37,32 +37,6 @@ public class AuthorService {
     }
 
 
-    public void sendFile(String username,MultipartFile file){
-        //store paper
-        //Notice!!!!
-        String pathName = "/usr/local/paper/"+username+"/";//you should use this line if the backend runs on dcloud
-        //String pathName = "C:/Users/  yourAccount  /Desktop/test/";//you should use this line and choose a path if the backend runs locally
-
-        File temp = new File(pathName);
-        if (!temp.exists()){
-            temp.mkdirs();
-        }
-        String pname = file.getOriginalFilename();
-        pathName += pname;
-
-
-
-
-        try {
-            File out = new File(pathName);
-            if (out.exists() && out.isFile()) out.delete();//如果文件存在，则先删除;
-            file.transferTo(out);// 写入文件
-            //System.out.println("文件上传成功");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     public Paper sendPaper(Long id,String username,String conferenceFullname,String title,String summary,ArrayList<String> writerName,
                            ArrayList<String>writerEmail,ArrayList<String> writerJob,ArrayList<String> writerAddress,
@@ -88,6 +62,33 @@ public class AuthorService {
 
 
         return paper;
+    }
+
+    public void sendFile(String username,String conferenceFullname,String title,MultipartFile file){
+        //store paper
+//        //Notice!!!!
+        String pathName = "/usr/local/paper/"+conferenceFullname+"/";//you should use this line if the backend runs on dcloud
+       // String pathName = "C:/Users/LENOVO/Desktop/test/"+conferenceFullname+"/";//you should use this line and choose a path if the backend runs locally
+
+        File temp = new File(pathName);
+        if (!temp.exists()){
+            temp.mkdirs();
+        }
+        String pname = file.getOriginalFilename();
+        pathName += pname;
+
+        Paper paper = paperRepository.findByConferenceFullnameAndTitle(conferenceFullname,title);
+        paper.setFilename(pname);
+        paperRepository.save(paper);
+
+        try {
+            File out = new File(pathName);
+            if (out.exists() && out.isFile()) out.delete();//如果文件存在，则先删除;
+            file.transferTo(out);// 写入文件
+            //System.out.println("文件上传成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void myPaper(String username, String conferenceFullname, MyPaperResponse response) {

@@ -59,15 +59,24 @@ public class AdminService {
         }
     }
 
-    public ArrayList<Conference> admin(){
-        ArrayList<Conference> result = new ArrayList<>();
-        Iterable<Conference> conferences =  conferenceRepository.findByState(0);
+    public void admin(AdminResponse response){
+        Iterable<Conference> conference0 =  conferenceRepository.findByState(0);
 
-        for (Conference each:conferences){
-            result.add(each);
+        for (Conference each:conference0){
+            response.getWaitingConference().add(each);
         }
-        System.out.println(result.size());
-        return result;
+
+        Iterable<Conference> conference1 =  conferenceRepository.findByState(1);
+
+        for (Conference each:conference1){
+            response.getAgreeConference().add(each);
+        }
+        Iterable<Conference> conference2 =  conferenceRepository.findByState(2);
+
+        for (Conference each:conference2){
+            response.getRefuseConference().add(each);
+        }
+
     }
 
     public Conference handleConference(String conferenceFullname,Boolean agreeOrNot){

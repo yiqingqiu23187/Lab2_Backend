@@ -50,8 +50,7 @@ public class AdminController {
     @GetMapping("/admin")
     public  ResponseEntity<?> admin(){
         AdminResponse response = new AdminResponse();
-        ArrayList<Conference> waitingConference = adminService.admin();
-        response.setWaitingConference(waitingConference);
+        adminService.admin(response);
         return ResponseEntity.ok(response);
     }
     @PostMapping("/handleConference")

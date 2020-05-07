@@ -37,18 +37,21 @@ public class AuthorController {
     }
 
 
-    @PostMapping("/sendFile")
-    public ResponseEntity<?> sendFile(@RequestParam(value = "username")String username,@RequestParam(value = "file", required = false) MultipartFile file){
-        authorService.sendFile(username,file);
-        return ResponseEntity.ok("ok");
-    }
+
 
     @PostMapping("/sendPaper")
     public ResponseEntity<?> sendPaper(@RequestBody SendPaperRequest request){
         Paper paper = authorService.sendPaper(request.getId(),request.getUsername(),request.getConferenceFullname(),request.getTitle(),
                 request.getSummary(),request.getWriterName(), request.getWriterEmail(),
-                request.getWriterJob(),request.getWriterAddress(), request.getTopics()) ;
+                request.getWriterJob(),request.getWriterAddress(), request.getTopics());
         return ResponseEntity.ok(paper);
+    }
+
+    @PostMapping("/sendFile")
+    public ResponseEntity<?> sendFile(@RequestParam("username")String username,@RequestParam("conferenceFullname") String conferenceFullname,
+                                      @RequestParam("title")String title,@RequestParam(value = "file", required = false) MultipartFile file){
+        authorService.sendFile(username,conferenceFullname,title,file);
+        return ResponseEntity.ok("ok");
     }
 
 

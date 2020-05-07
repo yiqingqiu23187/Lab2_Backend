@@ -14,6 +14,7 @@ public class Paper {
     private String title;
     private String summary;
     private Boolean finish = false;
+    private String filename;
 
     private ArrayList<String> topics = new ArrayList<>();
     private ArrayList<String> writerEmail = new ArrayList<>();
@@ -21,6 +22,14 @@ public class Paper {
     private ArrayList<String> writerJob = new ArrayList<>();
     private ArrayList<String> writerAddress =new ArrayList<>();
 
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 
     public Boolean getFinish() {
         return finish;
