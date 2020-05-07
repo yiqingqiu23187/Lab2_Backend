@@ -92,14 +92,16 @@ public class PCMemberService {
         Paper paper = paperRepository.findByid(paperID);
 
         String pathName = "/usr/local/paper/" + paper.getConferenceFullname() + "/" + paper.getFilename();//you should use this line if the backend runs on dcloud
-        // String pathName = "C:/Users/Your Account/Desktop/test/"+paper.getConferenceFullname()+"/"+paper.getFilename();//you should use this line and choose a path if the backend runs locally
+       //  String pathName = "C:/Users/LENOVO/Desktop/test/"+paper.getConferenceFullname()+"/"+paper.getFilename();//you should use this line and choose a path if the backend runs locally
 
         //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
         response.setContentType("multipart/form-data");
         //2.设置文件头：最后一个参数是设置下载文件名(假如我们叫a.pdf)
+        //response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
+       // response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;fileName=" + paper.getFilename());
         ServletOutputStream out;
-        //通过文件路径获得File对象(假如此路径中有一个download.pdf文件)
+        //通过文件路径获得File对象
         File file = new File(pathName);
 
         try {

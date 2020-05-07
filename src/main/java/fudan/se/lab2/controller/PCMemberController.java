@@ -44,8 +44,9 @@ public class PCMemberController {
     }
 
     @PostMapping("/download")
-    public void download(@RequestParam("id") Long id,HttpServletResponse response){
-        pcMemberService.download(id,response);
+    public void download(@RequestBody DownloadRequest request,HttpServletResponse response){
+        System.out.println(request.getId());
+        pcMemberService.download( request.getId(),response);
     }
 
 
