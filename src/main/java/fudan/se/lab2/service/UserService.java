@@ -35,7 +35,7 @@ public class UserService {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository,
+    public UserService(UserRepository userRepository,
                        ConferenceRepository conferenceRepository, InvitationRepository invitationRepository, PaperRepository paperRepository, JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.conferenceRepository = conferenceRepository;
