@@ -44,6 +44,7 @@ public class AuthorService {
         Paper paper = paperRepository.findByid(id);
         if (paper == null) {
             if (paperRepository.findByConferenceFullnameAndTitle(conferenceFullname,title)!=null){
+                paper = new Paper();
                 paper.setId(null);
                 return paper;
             }
