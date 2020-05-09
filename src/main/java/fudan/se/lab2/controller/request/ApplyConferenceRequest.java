@@ -11,6 +11,7 @@ public class ApplyConferenceRequest {
     private String submissionDeadline;
     private String releaseDate;
     private String username;
+    private String topic;
     private Map<String,String>[] topics;
 
     public Map<String,String>[] getTopics() {
@@ -21,6 +22,13 @@ public class ApplyConferenceRequest {
         this.topics = topics;
     }
 
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
 
     public String getUsername() {
         return username;

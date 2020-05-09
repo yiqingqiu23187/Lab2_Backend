@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 
 
@@ -33,8 +34,11 @@ public class ChairController {
         Conference conference;
         //System.out.println(topics.length);//To test
         ArrayList<String> tempTopics = new ArrayList<>();
-        for (int i = 0; i < request.getTopics().length; i++) {
-            tempTopics.add(request.getTopics()[i].get("value"));
+        tempTopics.add(request.getTopic());
+        if (request.getTopics() != null) {
+            for (int i = 0; i < request.getTopics().length; i++) {
+                tempTopics.add(request.getTopics()[i].get("value"));
+            }
         }
         try {
             conference = chairService.applyConfer(request.getUsername(), request, tempTopics);
