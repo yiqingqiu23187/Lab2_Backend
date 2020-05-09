@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class InviteResponse {
     ArrayList<User> users = new ArrayList<>();
+    private boolean invitedOrNot = false;
 
     public ArrayList<User> getUsers() {
         return users;
@@ -13,5 +14,13 @@ public class InviteResponse {
 
     public void setUsers(ArrayList<User> users) {
         this.users = users;
+    }
+
+    public boolean isInvitedOrNot() {
+        return invitedOrNot;
+    }
+
+    public void setInvitedOrNot(boolean invitedOrNot) {
+        this.invitedOrNot = invitedOrNot;
     }
 }

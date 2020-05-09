@@ -67,6 +67,10 @@ public class ChairService {
         Conference conference = conferenceRepository.findByFullName(request.getConferenceFullname());
         if (conference.getChair().equals(request.getChair())) {
             for (String username : request.getUsernames()) {
+                if (invitationRepository.findByInvitedPartyAndConferenceFullname(username,request.getConferenceFullname())!=null){
+                    response.setInvitedOrNot(true);
+                    continue;
+                }
                 Invitation invitation = new Invitation();
                 invitation.setInvitingParty(request.getChair());
                 invitation.setInvitedParty(username);

@@ -42,7 +42,13 @@ public class AuthorService {
                            ArrayList<String>writerEmail,ArrayList<String> writerJob,ArrayList<String> writerAddress,
                            ArrayList<String> topics) {
         Paper paper = paperRepository.findByid(id);
-        if (paper == null) paper = new Paper();
+        if (paper == null) {
+            if (paperRepository.findByConferenceFullnameAndTitle(conferenceFullname,title)!=null){
+                paper.setId(null);
+                return paper;
+            }
+            paper = new Paper();
+        }
         paper.setUsername(username);
         paper.setConferenceFullname(conferenceFullname);
         paper.setTitle(title);
@@ -55,12 +61,12 @@ public class AuthorService {
         paper.setTopics(topics);
         paperRepository.save(paper);//save paper
 
-        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+          Conference conference = conferenceRepository.findByFullName(conferenceFullname);
         if (!conference.getAuthors().contains(username))
             conference.getAuthors().add(username);
         conferenceRepository.save(conference);//save author
 
-
+        paper = paperRepository.findByConferenceFullnameAndTitle(conferenceFullname,title);
         return paper;
     }
 
