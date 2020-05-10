@@ -1,45 +1,53 @@
 package fudan.se.lab2.controller;
 
 import fudan.se.lab2.controller.request.LoginRequest;
+import fudan.se.lab2.controller.request.MessageRequest;
+import fudan.se.lab2.controller.request.MyConferenceRequest;
 import fudan.se.lab2.controller.request.RegisterRequest;
 import fudan.se.lab2.domain.Distribution;
 import fudan.se.lab2.domain.Invitation;
 import fudan.se.lab2.domain.User;
-import fudan.se.lab2.repository.ConferenceRepository;
-import fudan.se.lab2.repository.DistributionRepository;
-import fudan.se.lab2.repository.InvitationRepository;
-import fudan.se.lab2.repository.UserRepository;
+import fudan.se.lab2.repository.*;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
-
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class UserControllerTest {
-    @Autowired
-    private UserRepository userRepository;
+public class UserControllerTest {
     @Autowired
     private UserController userController;
+
     @Autowired
     private ConferenceRepository conferenceRepository;
     @Autowired
     private InvitationRepository invitationRepository;
     @Autowired
     private DistributionRepository distributionRepository;
-    
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PaperRepository paperRepository;
+    @Autowired
+    private MarkRepository markRepository;
+
 
     @Test
-    void test00_init(){
+    public void test00_init(){
         userRepository.deleteAll();
         conferenceRepository.deleteAll();
+        invitationRepository.deleteAll();;
+        distributionRepository.deleteAll();
+        markRepository.deleteAll();
+        paperRepository.deleteAll();
     }
 
     @Test
-    void test01_register() {
+    public void test01_register() {
         //Create an admin if not exists.
         if (userRepository.findByUsername("admin") == null) {
             User admin = new User(
@@ -86,26 +94,34 @@ class UserControllerTest {
 
 
     @Test
-    void test02_login() {
+    public void test02_login() {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("user1");
         loginRequest.setPassword("password");
-        ResponseEntity<?> responseEntity =userController.login(loginRequest);
+        userController.login(loginRequest);
     }
 
     @Test
-    void allConference() {
+    void test99_allConference() {
+        userController.allConference();
     }
 
     @Test
-    void myConference() {
+    void test98_myConference() {
+        MyConferenceRequest request = new MyConferenceRequest();
+        request.setUsername("user1");
+        userController.myConference(request);
     }
 
     @Test
-    void information() {
+    void test97_information() {
+        MessageRequest request = new MessageRequest();
+        request.setUsername("user1");
+        userController.information(request);
     }
 
     @Test
-    void welcome() {
+    void test96_welcome() {
+        userController.welcome();
     }
 }

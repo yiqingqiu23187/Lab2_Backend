@@ -1,13 +1,12 @@
 package fudan.se.lab2.controller;
 
-import fudan.se.lab2.controller.request.ApplyConferenceRequest;
-import fudan.se.lab2.controller.request.InviteRequest;
-import fudan.se.lab2.controller.request.OpenConferenceRequest;
-import fudan.se.lab2.controller.request.OpenMarkRequest;
+import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.domain.Conference;
 import fudan.se.lab2.domain.Invitation;
+import fudan.se.lab2.domain.Paper;
 import fudan.se.lab2.repository.ConferenceRepository;
 import fudan.se.lab2.repository.InvitationRepository;
+import fudan.se.lab2.repository.PaperRepository;
 import fudan.se.lab2.service.ChairService;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
@@ -15,16 +14,13 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class ChairControllerTest {
+public class ChairControllerTest {
 
     @Autowired
     ChairController chairController;
@@ -33,7 +29,7 @@ class ChairControllerTest {
     @Autowired
     InvitationRepository invitationRepository;
     @Test
-    void test03_applyConfer() {
+    public void test03_applyConfer() {
         ApplyConferenceRequest request = new ApplyConferenceRequest();
         request.setFullName("confer1");
         request.setUsername("user1");
@@ -240,12 +236,12 @@ class ChairControllerTest {
     }
 
     @Test
-    void test07_allUser() {
+    public void test07_allUser() {
         chairController.allUser();
     }
 
     @Test
-    void test08_openConference() {
+    public void test08_openConference() {
         OpenConferenceRequest request = new OpenConferenceRequest();
         request.setChair("user1");
         request.setConferenceFullname("confer1");
@@ -256,9 +252,7 @@ class ChairControllerTest {
     }
 
     @Test
-    void test09_invite() {
-
-        invitationRepository.deleteAll();
+    public void test09_invite() {
         InviteRequest request = new InviteRequest();
         request.setChair("user1");
         request.setConferenceFullname("confer1");
@@ -280,6 +274,11 @@ class ChairControllerTest {
     }
 
     @Test
-    void releaseMark() {
+    void test16_releaseMark() {
+        ReleaseMarkRequest request = new ReleaseMarkRequest();
+        request.setConferenceFullname("confer1");
+        chairController.releaseMark(request);
+
+        assertTrue(conferenceRepository.findByFullName("confer1").getReleased());
     }
 }

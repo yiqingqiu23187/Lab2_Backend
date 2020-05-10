@@ -37,7 +37,8 @@ public class ChairController {
         tempTopics.add(request.getTopic());
         if (request.getTopics() != null) {
             for (int i = 0; i < request.getTopics().length; i++) {
-                tempTopics.add(request.getTopics()[i].get("value"));
+                String temp = request.getTopics()[i].get("value");
+                if (!tempTopics.contains(temp))tempTopics.add(temp);
             }
         }
         try {

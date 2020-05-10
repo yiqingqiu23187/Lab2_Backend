@@ -25,9 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author LBW
- */
+
 @RestController
 public class UserController {
 

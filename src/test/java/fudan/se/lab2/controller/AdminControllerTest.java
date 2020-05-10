@@ -13,24 +13,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class AdminControllerTest {
+public class AdminControllerTest {
 
     @Autowired
     AdminController adminController;
     @Autowired
     ConferenceRepository conferenceRepository;
     @Test
-    void test04_waitingConference() {
+    public void test04_waitingConference() {
         adminController.waitingConference();
     }
 
     @Test
-    void test05_admin() {
+    public void test05_admin() {
         adminController.admin();
     }
 
     @Test
-    void test06_handleConference() {
+    public void test06_handleConference() {
         HandleConferenceRequest request = new HandleConferenceRequest();
         request.setConferenceFullname("confer1");
         request.setAgreeOrNot(true);

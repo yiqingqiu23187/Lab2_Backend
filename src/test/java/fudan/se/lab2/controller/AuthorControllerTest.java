@@ -1,5 +1,6 @@
 package fudan.se.lab2.controller;
 
+import fudan.se.lab2.controller.request.MyConferenceRequest;
 import fudan.se.lab2.controller.request.SendPaperRequest;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
@@ -18,12 +19,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class AuthorControllerTest {
+public class AuthorControllerTest {
 
     @Autowired
     private AuthorController authorController;
     @Test
-    void test11_sendPaper() {
+    public void test11_sendPaper() {
         SendPaperRequest request1 = getSendPaperRequest("confer1", "paper1summary", "paper1", "user1", "topic1",
                 "writer1", "1", "1", "1", "2", "2", "2", "2");
         SendPaperRequest request2 = getSendPaperRequest("confer1", "paper2summary", "paper2", "user2", "topic2",
@@ -80,6 +81,8 @@ class AuthorControllerTest {
     }
 
     @Test
-    void myMark() {
+    void test17_myMark() {
+        MyConferenceRequest request = new MyConferenceRequest();
+        request.setUsername("user1");
     }
 }

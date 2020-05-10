@@ -1,11 +1,15 @@
 package fudan.se.lab2.controller;
 
+import fudan.se.lab2.controller.request.DownloadRequest;
 import fudan.se.lab2.controller.request.HandleInvitationRequest;
+import fudan.se.lab2.controller.request.MyConferenceRequest;
+import fudan.se.lab2.controller.request.SubmitReviewRequest;
 import fudan.se.lab2.domain.Distribution;
 import fudan.se.lab2.repository.ConferenceRepository;
 import fudan.se.lab2.repository.DistributionRepository;
 import fudan.se.lab2.repository.InvitationRepository;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +20,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class PCMemberControllerTest {
+public class PCMemberControllerTest {
     @Autowired
     ConferenceRepository conferenceRepository;
     @Autowired
@@ -26,7 +30,7 @@ class PCMemberControllerTest {
     @Autowired
     PCMemberController pcMemberController;
     @Test
-    void test10_handleInvitation() {
+    public void test10_handleInvitation() {
 
         HandleInvitationRequest request = new HandleInvitationRequest();
         request.setUsername("user2");
@@ -63,14 +67,43 @@ class PCMemberControllerTest {
     }
 
     @Test
-    void myDistribution() {
+    void test13_myDistribution() {
+        MyConferenceRequest request = new MyConferenceRequest();
+        request.setUsername("user2");
+        pcMemberController.myDistribution(request);
+
+        request.setUsername("user3");
+        pcMemberController.myDistribution(request);
+
+        request.setUsername("user4");
+        pcMemberController.myDistribution(request);
+    }
+
+    @Ignore
+    void test14_download() {
     }
 
     @Test
-    void download() {
+    void test15_submitMark() {
+        helpSubmitMark("user1");
+        helpSubmitMark("user2");
+        helpSubmitMark("user3");
+        helpSubmitMark("user4");
+        assertTrue(conferenceRepository.findByFullName("confer1").getFinish());
     }
 
-    @Test
-    void submitMark() {
+    void helpSubmitMark(String username){
+        Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(username,"confer1");
+        for (int i =0;i<distribution.getPaperTitles().size();i++){
+            SubmitReviewRequest request = new SubmitReviewRequest();
+            request.setPaperTitle(distribution.getPaperTitles().get(i));
+            request.setConferenceFullname(distribution.getConferenceFullname());
+            request.setUsername(username);
+            request.setConfidence(1);
+            request.setDescribe(username);
+            request.setScore(1);
+            pcMemberController.submitMark(request);
+        }
+
     }
 }
