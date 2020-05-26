@@ -60,9 +60,9 @@ public class PCMemberController {
     }
 
     @PostMapping("/getComment")
-    public ResponseEntity<?> getComment(@RequestParam("id") Long paperID){
+    public ResponseEntity<?> getComment(@RequestBody GetCommentRequest request){
         GetCommentResponse getCommentResponse = new GetCommentResponse();
-        pcMemberService.getComment(paperID,getCommentResponse);
+        pcMemberService.getComment(request.getId(),getCommentResponse);
 
         return ResponseEntity.ok(getCommentResponse);
     }
