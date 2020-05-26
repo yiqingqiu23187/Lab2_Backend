@@ -2,7 +2,9 @@ package fudan.se.lab2.controller;
 
 import fudan.se.lab2.controller.request.*;
 
+import fudan.se.lab2.controller.response.GetCommentResponse;
 import fudan.se.lab2.controller.response.MyPaperResponse;
+import fudan.se.lab2.domain.Comment;
 import fudan.se.lab2.domain.Invitation;
 import fudan.se.lab2.domain.Mark;
 import fudan.se.lab2.domain.Paper;
@@ -55,5 +57,19 @@ public class PCMemberController {
         Mark mark = pcMemberService.submitMark(request.getPaperTitle(),request.getUsername(),request.getConferenceFullname(),request.getScore(),
                 request.getConfidence(),request.getDescribe());
         return ResponseEntity.ok(mark);
+    }
+
+    @PostMapping("/getComment")
+    public ResponseEntity<?> getComment(@RequestParam("id") Long paperID){
+        GetCommentResponse getCommentResponse = new GetCommentResponse();
+        pcMemberService.getComment(paperID,getCommentResponse);
+
+        return ResponseEntity.ok(getCommentResponse);
+    }
+
+    @PostMapping("/addComment")
+    public ResponseEntity<?> addComment(@RequestBody AddCommentRequest request){
+        Comment comment = pcMemberService.addComment(request);
+        return ResponseEntity.ok(comment);
     }
 }

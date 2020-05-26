@@ -1,5 +1,7 @@
 package fudan.se.lab2.service;
 
+import fudan.se.lab2.controller.request.AddCommentRequest;
+import fudan.se.lab2.controller.response.GetCommentResponse;
 import fudan.se.lab2.controller.response.MyPaperResponse;
 import fudan.se.lab2.domain.*;
 import fudan.se.lab2.repository.*;
@@ -22,10 +24,12 @@ public class PCMemberService {
     private PaperRepository paperRepository;
     private DistributionRepository distributionRepository;
     private MarkRepository markRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
     public PCMemberService(UserRepository userRepository, MarkRepository markRepository,
                            ConferenceRepository conferenceRepository, InvitationRepository invitationRepository,
+                           CommentRepository commentRepository,
                            PaperRepository paperRepository, DistributionRepository distributionRepository) {
         this.userRepository = userRepository;
         this.markRepository = markRepository;
@@ -33,6 +37,7 @@ public class PCMemberService {
         this.invitationRepository = invitationRepository;
         this.paperRepository = paperRepository;
         this.distributionRepository = distributionRepository;
+        this.commentRepository = commentRepository;
     }
 
     public Invitation handleInvitation(String username, String conferenceFullname,
@@ -92,13 +97,13 @@ public class PCMemberService {
         Paper paper = paperRepository.findByid(paperID);
 
         String pathName = "/usr/local/paper/" + paper.getConferenceFullname() + "/" + paper.getFilename();//you should use this line if the backend runs on dcloud
-       // String pathName = "C:/Users/LENOVO/Desktop/test/"+paper.getConferenceFullname()+"/"+paper.getFilename();//you should use this line and choose a path if the backend runs locally
+        // String pathName = "C:/Users/LENOVO/Desktop/test/"+paper.getConferenceFullname()+"/"+paper.getFilename();//you should use this line and choose a path if the backend runs locally
 
         //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
         response.setContentType("multipart/form-data");
         //2.设置文件头：最后一个参数是设置下载文件名(假如我们叫a.pdf)
         //response.Headers.Add("Access-Control-Expose-Headers", "Content-Disposition");
-       // response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+        // response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;fileName=" + paper.getFilename());
         ServletOutputStream out;
         //通过文件路径获得File对象
@@ -127,33 +132,64 @@ public class PCMemberService {
     }
 
 
-public Mark submitMark(String title,String username,String conferenceFullname,int score,
-        int confidence,String describe){
-        Mark mark=markRepository.findByPaperTitleAndConferenceFullname(title,conferenceFullname);
-        int index=mark.getPcmembers().indexOf(username);
-        mark.getFinish().set(index,true);
-        mark.getScores().set(index,score);
-        mark.getConfidences().set(index,confidence);
-        mark.getDiscribes().set(index,describe);
+    public Mark submitMark(String title, String username, String conferenceFullname, int score,
+                           int confidence, String describe) {
+        Mark mark = markRepository.findByPaperTitleAndConferenceFullname(title, conferenceFullname);
+        int index = mark.getPcmembers().indexOf(username);
+        mark.getFinish().set(index, true);
+        mark.getScores().set(index, score);
+        mark.getConfidences().set(index, confidence);
+        mark.getDiscribes().set(index, describe);
         markRepository.save(mark);
 
-        ArrayList<Boolean> temp=new ArrayList<>();
+        ArrayList<Boolean> temp = new ArrayList<>();
         temp.add(true);
         temp.add(true);
         temp.add(true);
-        if(mark.getFinish().equals(temp)){
-        Paper paper=paperRepository.findByConferenceFullnameAndTitle(conferenceFullname,title);
-        paper.setFinish(true);
-        paperRepository.save(paper);
-        Iterable<Paper> papers=paperRepository.findByConferenceFullname(conferenceFullname);
-        for(Paper e:papers){
-        if(!e.getFinish())return mark;
-        }
-        Conference conference=conferenceRepository.findByFullName(conferenceFullname);
-        conference.setFinish(true);
-        conferenceRepository.save(conference);
+        if (mark.getFinish().equals(temp)) {
+            Paper paper = paperRepository.findByConferenceFullnameAndTitle(conferenceFullname, title);
+            paper.setFinish(true);
+            paperRepository.save(paper);
+            Iterable<Paper> papers = paperRepository.findByConferenceFullname(conferenceFullname);
+            for (Paper e : papers) {
+                if (!e.getFinish()) return mark;
+            }
+            Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+            conference.setFinish(true);
+            conferenceRepository.save(conference);
         }
 
         return mark;
+    }
+
+    public void getComment(Long paperID, GetCommentResponse response){
+        Paper paper = paperRepository.findByid(paperID);
+        Iterable<Comment> comments = commentRepository.findByPaperTitle(paper.getTitle());
+        if (comments==null){
+            response.setComments(null);
+            return;
         }
+        ArrayList<Comment> temp = new ArrayList<>();
+        for (Comment e : comments){
+            temp.add(e);
         }
+
+        response.setComments(temp);
+        return;
+    }
+
+
+    public Comment addComment(AddCommentRequest request){
+        Comment comment = new Comment();
+        comment.setPaperTitle(request.getPaperTitle());
+        comment.setConferenceFullname(request.getConferenceFullname());
+        comment.setUsername(request.getUsername());
+        comment.setComment(request.getComment());
+        commentRepository.save(comment);
+
+        return comment;
+    }
+
+
+}
+

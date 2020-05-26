@@ -23,6 +23,7 @@ public class Paper {
     private ArrayList<String> writerAddress =new ArrayList<>();
 
 
+
     public String getFilename() {
         return filename;
     }
