@@ -13,7 +13,7 @@ public class Paper {
     private String conferenceFullname;
     private String title;
     private String summary;
-    private Boolean finish = false;
+    private int finish = 0;
     private String filename;
 
     private ArrayList<String> topics = new ArrayList<>();
@@ -22,7 +22,13 @@ public class Paper {
     private ArrayList<String> writerJob = new ArrayList<>();
     private ArrayList<String> writerAddress =new ArrayList<>();
 
+    public int getFinish() {
+        return finish;
+    }
 
+    public void setFinish(int finish) {
+        this.finish = finish;
+    }
 
     public String getFilename() {
         return filename;
@@ -30,14 +36,6 @@ public class Paper {
 
     public void setFilename(String filename) {
         this.filename = filename;
-    }
-
-    public Boolean getFinish() {
-        return finish;
-    }
-
-    public void setFinish(Boolean finish) {
-        this.finish = finish;
     }
 
     public Long getId() {

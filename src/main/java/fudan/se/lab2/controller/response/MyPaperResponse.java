@@ -7,6 +7,16 @@ import java.util.ArrayList;
 public class MyPaperResponse {
     ArrayList<Paper> papers = new ArrayList<>();
     ArrayList<Boolean> finishs = new ArrayList<>();
+    ArrayList<Integer> numbers = new ArrayList<>();
+
+    public ArrayList<Integer> getNumbers() {
+        return numbers;
+    }
+
+    public void setNumbers(ArrayList<Integer> numbers) {
+        this.numbers = numbers;
+    }
+
     public ArrayList<Paper> getPapers() {
         return papers;
     }

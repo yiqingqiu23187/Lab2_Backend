@@ -21,7 +21,7 @@ public class Conference {
     private Boolean openOrNot = false;
     private int state;//state:0: To be aproved  1:Audit success   2:Audit failure
     private Boolean markable = false;
-    private Boolean finish = false;
+    private int finish = 0;
     private Boolean released = false;
 
 
@@ -29,12 +29,11 @@ public class Conference {
     private ArrayList<String> PCMembers = new ArrayList<>();
     private ArrayList<String> authors = new ArrayList<>();
 
-
-    public Boolean getFinish() {
+    public int getFinish() {
         return finish;
     }
 
-    public void setFinish(Boolean finish) {
+    public void setFinish(int finish) {
         this.finish = finish;
     }
 

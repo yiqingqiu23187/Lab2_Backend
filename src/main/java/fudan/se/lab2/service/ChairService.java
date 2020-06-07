@@ -119,6 +119,7 @@ public class ChairService {
                     markRepository.save(mark);
 
                     distribution.getPaperTitles().add(title);
+                    distribution.getNumbers().add(0);
                     distributionRepository.save(distribution);
                 }
             }
@@ -157,6 +158,7 @@ public class ChairService {
                         markRepository.save(mark);
 
                         distribution.getPaperTitles().add(title);
+                        distribution.getNumbers().add(0);
                         distributionRepository.save(distribution);
                     }
                 }else {
@@ -171,6 +173,7 @@ public class ChairService {
                         markRepository.save(mark);
 
                         distribution.getPaperTitles().add(title);
+                        distribution.getNumbers().add(0);
                         distributionRepository.save(distribution);
                     }
                 }

@@ -13,17 +13,17 @@ public class Mark {
     private String paperTitle;
     private String conferenceFullname;
     private ArrayList<String> pcmembers = new ArrayList<>();
-    private ArrayList<Boolean> finish = new ArrayList<>();
+    private ArrayList<Integer> finish = new ArrayList<>();
 
     private ArrayList<Integer> scores = new ArrayList<>();
     private ArrayList<Integer> confidences = new ArrayList<>();
     private ArrayList<String> discribes = new ArrayList<>();
 
-    public ArrayList<Boolean> getFinish() {
+    public ArrayList<Integer> getFinish() {
         return finish;
     }
 
-    public void setFinish(ArrayList<Boolean> finish) {
+    public void setFinish(ArrayList<Integer> finish) {
         this.finish = finish;
     }
 

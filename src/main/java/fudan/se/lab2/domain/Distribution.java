@@ -14,6 +14,15 @@ public class Distribution {
 
     private ArrayList<String> topics = new ArrayList<>();
     private ArrayList<String> paperTitles = new ArrayList<>();
+    private ArrayList<Integer> numbers=new ArrayList<>();
+
+    public ArrayList<Integer> getNumbers() {
+        return numbers;
+    }
+
+    public void setNumbers(ArrayList<Integer> numbers) {
+        this.numbers = numbers;
+    }
 
     public Long getId() {
         return id;

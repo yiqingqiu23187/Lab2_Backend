@@ -77,18 +77,27 @@ public class PCMemberService {
         Iterable<Distribution> distributions = distributionRepository.findByUsername(username);
         ArrayList<Paper> papers = new ArrayList<>();
         ArrayList<Boolean> finishs = new ArrayList<>();
+        ArrayList<Integer> numbers = new ArrayList<>();
         for (Distribution e : distributions) {
             for (String each : e.getPaperTitles()) {
+
                 Paper paper = paperRepository.findByConferenceFullnameAndTitle(e.getConferenceFullname(), each);
                 papers.add(paper);
 
                 Mark mark = markRepository.findByPaperTitleAndConferenceFullname(each, e.getConferenceFullname());
                 int index = mark.getPcmembers().indexOf(username);
-                finishs.add(mark.getFinish().get(index));
+                boolean finish;
+                if (mark.getFinish().get(index) > 0) finish = true;
+                else finish = false;
+                finishs.add(finish);
+
+                int numberindex = e.getPaperTitles().indexOf(each);
+                numbers.add(e.getNumbers().get(numberindex));
             }
         }
         response.setPapers(papers);
         response.setFinishs(finishs);
+        response.setNumbers(numbers);
     }
 
     public void download(Long paperID, HttpServletResponse response) {
@@ -134,43 +143,62 @@ public class PCMemberService {
 
     public Mark submitMark(String title, String username, String conferenceFullname, int score,
                            int confidence, String describe) {
+
+        //set number of distribution
+        Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(username, conferenceFullname);
+        int numberindex = distribution.getPaperTitles().indexOf(title);
+        ArrayList<Integer> numbers = distribution.getNumbers();
+        int number = numbers.get(numberindex);
+        number++;
+        numbers.set(numberindex, number);
+        distribution.setNumbers(numbers);
+        distributionRepository.save(distribution);
+
+        //set finish of mark
         Mark mark = markRepository.findByPaperTitleAndConferenceFullname(title, conferenceFullname);
         int index = mark.getPcmembers().indexOf(username);
-        mark.getFinish().set(index, true);
+        mark.getFinish().set(index, number);
         mark.getScores().set(index, score);
         mark.getConfidences().set(index, confidence);
         mark.getDiscribes().set(index, describe);
         markRepository.save(mark);
 
-        ArrayList<Boolean> temp = new ArrayList<>();
-        temp.add(true);
-        temp.add(true);
-        temp.add(true);
-        if (mark.getFinish().equals(temp)) {
-            Paper paper = paperRepository.findByConferenceFullnameAndTitle(conferenceFullname, title);
-            paper.setFinish(true);
-            paperRepository.save(paper);
-            Iterable<Paper> papers = paperRepository.findByConferenceFullname(conferenceFullname);
-            for (Paper e : papers) {
-                if (!e.getFinish()) return mark;
-            }
-            Conference conference = conferenceRepository.findByFullName(conferenceFullname);
-            conference.setFinish(true);
-            conferenceRepository.save(conference);
+
+        //set finish of mark, paper and conference
+        int finishOfMark = mark.getFinish().get(0);
+        for (int e : mark.getFinish()) {
+            finishOfMark = Math.min(finishOfMark, e);
         }
+        Paper paper = paperRepository.findByConferenceFullnameAndTitle(conferenceFullname, title);
+        paper.setFinish(finishOfMark);
+        paperRepository.save(paper);
+        Iterable<Paper> papers = paperRepository.findByConferenceFullname(conferenceFullname);
+        ArrayList<Paper> temp = new ArrayList<>();
+        for (Paper e : papers) {
+            temp.add(e);
+        }
+        int finishOfConference = temp.get(0).getFinish();
+        for (Paper e : temp) {
+            finishOfConference = Math.min(finishOfConference, e.getFinish());
+        }
+
+        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+        conference.setFinish(finishOfConference);
+        conferenceRepository.save(conference);
+
 
         return mark;
     }
 
-    public void getComment(Long paperID, GetCommentResponse response){
+    public void getComment(Long paperID, GetCommentResponse response) {
         Paper paper = paperRepository.findByid(paperID);
         Iterable<Comment> comments = commentRepository.findByPaperTitle(paper.getTitle());
-        if (comments==null){
+        if (comments == null) {
             response.setComments(null);
             return;
         }
         ArrayList<Comment> temp = new ArrayList<>();
-        for (Comment e : comments){
+        for (Comment e : comments) {
             temp.add(e);
         }
 
@@ -179,7 +207,7 @@ public class PCMemberService {
     }
 
 
-    public Comment addComment(AddCommentRequest request){
+    public Comment addComment(AddCommentRequest request) {
         Comment comment = new Comment();
         comment.setPaperTitle(request.getPaperTitle());
         comment.setConferenceFullname(request.getConferenceFullname());
