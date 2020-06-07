@@ -112,7 +112,7 @@ public class AuthorService {
         Iterable<Paper> papers = paperRepository.findByUsername(username);
         ArrayList<Mark> marks = new ArrayList<>();
         for (Paper e:papers){
-            if (e.getFinish()){
+            if (e.getFinish()>0){
                 Conference conference = conferenceRepository.findByFullName(e.getConferenceFullname());
                 if (conference.getReleased())marks.add(markRepository.findByPaperTitleAndConferenceFullname(e.getTitle(),conference.getFullName()));
                 else System.out.println("该会议主席仍未发布评审结果");
