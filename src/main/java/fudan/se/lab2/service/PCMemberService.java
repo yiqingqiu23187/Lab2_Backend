@@ -207,6 +207,53 @@ public class PCMemberService {
     }
 
 
+    public Mark noModify(Long paperID,String username){
+        Paper paper = paperRepository.findByid(paperID);
+        String conferenceFullname = paper.getConferenceFullname();
+        String title = paper.getTitle();
+        //set number of distribution
+        Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(username, conferenceFullname);
+        int numberindex = distribution.getPaperTitles().indexOf(title);
+        ArrayList<Integer> numbers = distribution.getNumbers();
+        int number = numbers.get(numberindex);
+        number++;
+        numbers.set(numberindex, number);
+        distribution.setNumbers(numbers);
+        distributionRepository.save(distribution);
+
+        //set finish of mark
+        Mark mark = markRepository.findByPaperTitleAndConferenceFullname(title, conferenceFullname);
+        int index = mark.getPcmembers().indexOf(username);
+        mark.getFinish().set(index, number);
+        markRepository.save(mark);
+
+
+        //set finish of mark, paper and conference
+        int finishOfMark = mark.getFinish().get(0);
+        for (int e : mark.getFinish()) {
+            finishOfMark = Math.min(finishOfMark, e);
+        }
+
+        paper.setFinish(finishOfMark);
+        paperRepository.save(paper);
+        Iterable<Paper> papers = paperRepository.findByConferenceFullname(conferenceFullname);
+        ArrayList<Paper> temp = new ArrayList<>();
+        for (Paper e : papers) {
+            temp.add(e);
+        }
+        int finishOfConference = temp.get(0).getFinish();
+        for (Paper e : temp) {
+            finishOfConference = Math.min(finishOfConference, e.getFinish());
+        }
+
+        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+        conference.setFinish(finishOfConference);
+        conferenceRepository.save(conference);
+
+
+        return mark;
+    }
+
     public Comment addComment(AddCommentRequest request) {
         Comment comment = new Comment();
         comment.setPaperTitle(request.getPaperTitle());

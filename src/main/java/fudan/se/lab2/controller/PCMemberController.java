@@ -12,11 +12,13 @@ import fudan.se.lab2.service.PCMemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Response;
 import java.util.ArrayList;
 
 
@@ -71,5 +73,11 @@ public class PCMemberController {
     public ResponseEntity<?> addComment(@RequestBody AddCommentRequest request){
         Comment comment = pcMemberService.addComment(request);
         return ResponseEntity.ok(comment);
+    }
+
+    @PostMapping("noModify")
+    public ResponseEntity<?> noModify(@RequestBody NoModifyRequest request){
+        Mark mark = pcMemberService.noModify(request.getId(),request.getUsername());
+        return ResponseEntity.ok(mark);
     }
 }
