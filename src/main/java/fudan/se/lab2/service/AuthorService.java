@@ -2,6 +2,7 @@ package fudan.se.lab2.service;
 
 
 import fudan.se.lab2.controller.response.*;
+import fudan.se.lab2.domain.Comment;
 import fudan.se.lab2.domain.Conference;
 import fudan.se.lab2.domain.Mark;
 import fudan.se.lab2.domain.Paper;
@@ -25,14 +26,16 @@ public class AuthorService {
     private InvitationRepository invitationRepository;
     private PaperRepository paperRepository;
     private MarkRepository markRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
     public AuthorService(UserRepository userRepository, MarkRepository markRepository,
-                         ConferenceRepository conferenceRepository, InvitationRepository invitationRepository, PaperRepository paperRepository, JwtTokenUtil jwtTokenUtil) {
+                         CommentRepository commentRepository,ConferenceRepository conferenceRepository, InvitationRepository invitationRepository, PaperRepository paperRepository, JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.markRepository = markRepository;
         this.conferenceRepository = conferenceRepository;
         this.invitationRepository = invitationRepository;
+        this.commentRepository = commentRepository;
         this.paperRepository = paperRepository;
     }
 
@@ -74,8 +77,8 @@ public class AuthorService {
     public void sendFile(String username,String conferenceFullname,String title,MultipartFile file){
         //store paper
 //        //Notice!!!!
-       String pathName = "/usr/local/paper/"+conferenceFullname+"/";//you should use this line if the backend runs on dcloud
-        //String pathName = "C:/Users/LENOVO/Desktop/test/"+conferenceFullname+"/";//you should use this line and choose a path if the backend runs locally
+       //String pathName = "/usr/local/paper/"+conferenceFullname+"/";//you should use this line if the backend runs on dcloud
+       String pathName = "C:/Users/15498/Desktop/test/"+conferenceFullname+"/";//you should use this line and choose a path if the backend runs locally
 
         File temp = new File(pathName);
         if (!temp.exists()){
@@ -120,5 +123,16 @@ public class AuthorService {
         }
 
         return marks;
+    }
+
+    public Comment rebuttal(String username,String paperTitle,String conferenceFullname,String rebuttal){
+        Comment comment = new Comment();
+        comment.setPaperTitle(paperTitle);
+        comment.setConferenceFullname(conferenceFullname);
+        comment.setUsername(username);
+        comment.setComment(rebuttal);
+        commentRepository.save(comment);
+
+        return comment;
     }
 }

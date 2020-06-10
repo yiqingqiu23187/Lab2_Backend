@@ -105,8 +105,8 @@ public class PCMemberService {
 
         Paper paper = paperRepository.findByid(paperID);
 
-        String pathName = "/usr/local/paper/" + paper.getConferenceFullname() + "/" + paper.getFilename();//you should use this line if the backend runs on dcloud
-        // String pathName = "C:/Users/LENOVO/Desktop/test/"+paper.getConferenceFullname()+"/"+paper.getFilename();//you should use this line and choose a path if the backend runs locally
+        //String pathName = "/usr/local/paper/" + paper.getConferenceFullname() + "/" + paper.getFilename();//you should use this line if the backend runs on dcloud
+         String pathName = "C:/Users/15498/Desktop/test/"+paper.getConferenceFullname()+"/"+paper.getFilename();//you should use this line and choose a path if the backend runs locally
 
         //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
         response.setContentType("multipart/form-data");

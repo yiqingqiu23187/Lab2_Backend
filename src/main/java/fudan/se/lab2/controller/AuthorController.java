@@ -66,4 +66,10 @@ public class AuthorController {
         response.setMarks(authorService.myMark(request.getUsername()));
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/rebuttal")
+    public ResponseEntity<?> rebuttal(RebuttalRequest request){
+        Comment comment = authorService.rebuttal(request.getUsername(),request.getPaperTitle(),request.getConferenceFullname(),request.getRebuttal());
+        return ResponseEntity.ok(comment);
+    }
 }
