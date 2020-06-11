@@ -186,6 +186,53 @@ public class ChairService {
     public Conference releaseMark(String conferenceFullname){
         Conference conference = conferenceRepository.findByFullName(conferenceFullname);
         conference.setReleased(true);
+
+
+
+
+        Iterable<Paper> papers = paperRepository.findByConferenceFullname(conferenceFullname);
+        boolean allPaperNotNeedRebuttal = true;
+        for(Paper paper:papers){
+            Mark mark = markRepository.findByPaperTitleAndConferenceFullname(paper.getTitle(),paper.getConferenceFullname());
+            ArrayList<Integer> scores = mark.getScores();
+            boolean needRebuttalOrNot = false;
+            for (int score:scores){
+                if (score<0)needRebuttalOrNot = true;
+            }
+            if (needRebuttalOrNot)allPaperNotNeedRebuttal = false;
+
+            if (!needRebuttalOrNot){
+                paper.setRebuttal(true);
+                paper.setFinish(paper.getFinish()+1);
+                paperRepository.save(paper);
+
+                mark.setRebuttal(true);
+                ArrayList<Integer> finish = mark.getFinish();
+                ArrayList<Integer> temp = new ArrayList<>();
+                for (int fi:finish){
+                    temp.add(fi+1);
+                }
+                mark.setFinish(temp);
+                markRepository.save(mark);
+
+                Iterable<Distribution> distributions = distributionRepository.findByConferenceFullname(conferenceFullname);
+                for (Distribution distribution:distributions){
+                    if (distribution.getPaperTitles().contains(paper.getTitle())){
+                        int index = distribution.getPaperTitles().indexOf(paper.getTitle());
+                        ArrayList<Integer> numbers = distribution.getNumbers();
+                        numbers.set(index,numbers.get(index)+1);
+                        distribution.setNumbers(numbers);
+                        distributionRepository.save(distribution);
+                    }
+                }
+            }
+
+
+        }
+        if (allPaperNotNeedRebuttal){
+            conference.setFinish(conference.getFinish()+1);
+        }
+
         conferenceRepository.save(conference);
         return conference;
     }

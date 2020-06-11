@@ -12,12 +12,21 @@ public class Mark {
 
     private String paperTitle;
     private String conferenceFullname;
+    private boolean rebuttal = false;
     private ArrayList<String> pcmembers = new ArrayList<>();
     private ArrayList<Integer> finish = new ArrayList<>();
 
     private ArrayList<Integer> scores = new ArrayList<>();
     private ArrayList<Integer> confidences = new ArrayList<>();
     private ArrayList<String> discribes = new ArrayList<>();
+
+    public boolean isRebuttal() {
+        return rebuttal;
+    }
+
+    public void setRebuttal(boolean rebuttal) {
+        this.rebuttal = rebuttal;
+    }
 
     public ArrayList<Integer> getFinish() {
         return finish;

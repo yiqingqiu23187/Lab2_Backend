@@ -68,7 +68,7 @@ public class AuthorController {
     }
 
     @PostMapping("/rebuttal")
-    public ResponseEntity<?> rebuttal(RebuttalRequest request){
+    public ResponseEntity<?> rebuttal(@RequestBody RebuttalRequest request){
         Comment comment = authorService.rebuttal(request.getUsername(),request.getPaperTitle(),request.getConferenceFullname(),request.getRebuttal());
         return ResponseEntity.ok(comment);
     }

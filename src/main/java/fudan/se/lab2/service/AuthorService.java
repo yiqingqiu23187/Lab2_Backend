@@ -133,6 +133,14 @@ public class AuthorService {
         comment.setComment(rebuttal);
         commentRepository.save(comment);
 
+        Paper paper = paperRepository.findByConferenceFullnameAndTitle(conferenceFullname,paperTitle);
+        paper.setRebuttal(true);
+        paperRepository.save(paper);
+
+        Mark mark = markRepository.findByPaperTitleAndConferenceFullname(paperTitle,conferenceFullname);
+        mark.setRebuttal(true);
+        markRepository.save(mark);
+
         return comment;
     }
 }
