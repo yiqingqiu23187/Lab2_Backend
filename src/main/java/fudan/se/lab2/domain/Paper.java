@@ -15,7 +15,7 @@ public class Paper {
     private String summary;
     private int finish = 0;
     private String filename;
-    private boolean rebuttal = false;
+    private Boolean rebuttal = false;
 
     private ArrayList<String> topics = new ArrayList<>();
     private ArrayList<String> writerEmail = new ArrayList<>();
@@ -23,7 +23,7 @@ public class Paper {
     private ArrayList<String> writerJob = new ArrayList<>();
     private ArrayList<String> writerAddress =new ArrayList<>();
 
-    public boolean isRebuttal() {
+    public Boolean isRebuttal() {
         return rebuttal;
     }
 

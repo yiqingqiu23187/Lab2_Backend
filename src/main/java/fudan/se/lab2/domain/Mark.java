@@ -12,7 +12,7 @@ public class Mark {
 
     private String paperTitle;
     private String conferenceFullname;
-    private boolean rebuttal = false;
+    private Boolean rebuttal = false;
     private ArrayList<String> pcmembers = new ArrayList<>();
     private ArrayList<Integer> finish = new ArrayList<>();
 
@@ -20,7 +20,7 @@ public class Mark {
     private ArrayList<Integer> confidences = new ArrayList<>();
     private ArrayList<String> discribes = new ArrayList<>();
 
-    public boolean isRebuttal() {
+    public Boolean isRebuttal() {
         return rebuttal;
     }
 
