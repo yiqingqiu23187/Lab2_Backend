@@ -236,4 +236,16 @@ public class ChairService {
         conferenceRepository.save(conference);
         return conference;
     }
+
+    public ArrayList<Paper> chairTalking(String username){
+        Iterable<Conference> conferences = conferenceRepository.findByChair(username);
+        ArrayList<Paper> papers = new ArrayList<>();
+        for (Conference conference :conferences){
+            Iterable<Paper> temp = paperRepository.findByConferenceFullname(conference.getFullName());
+            for (Paper paper:temp){
+                papers.add(paper);
+            }
+        }
+        return papers;
+    }
 }

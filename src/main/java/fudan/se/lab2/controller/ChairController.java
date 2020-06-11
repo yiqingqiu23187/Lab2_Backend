@@ -3,6 +3,7 @@ package fudan.se.lab2.controller;
 import fudan.se.lab2.controller.request.*;
 import fudan.se.lab2.controller.response.*;
 import fudan.se.lab2.domain.Conference;
+import fudan.se.lab2.domain.Paper;
 import fudan.se.lab2.domain.User;
 import fudan.se.lab2.exception.ConferHasBeenRegisteredException;
 import fudan.se.lab2.exception.ControllerAdvisor;
@@ -84,6 +85,14 @@ public class ChairController {
     public ResponseEntity<?> releaseMark(@RequestBody ReleaseMarkRequest request) {
         Conference conference = chairService.releaseMark(request.getConferenceFullname());
         return ResponseEntity.ok(conference);
+    }
+
+    @PostMapping("/chairTalking")
+    public ResponseEntity<?> chairTalking(@RequestBody MyConferenceRequest request){
+        ArrayList<Paper> papers = chairService.chairTalking(request.getUsername());
+        ChairTalkingResponse response = new ChairTalkingResponse();
+        response.setPapers(papers);
+        return ResponseEntity.ok(response);
     }
 
 }
