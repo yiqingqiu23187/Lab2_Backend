@@ -77,8 +77,8 @@ public class ChairController {
     @PostMapping("/openMark")
     public ResponseEntity<?> openMark(@RequestBody OpenMarkRequest request) {
 
-        Conference conference = chairService.openMark(request.getConferenceFullname(), request.getMarkable(), request.getStrategy());
-        return ResponseEntity.ok(conference);
+        OpenMarkResponse response = chairService.openMark(request.getConferenceFullname(), request.getMarkable(), request.getStrategy());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/releaseMark")

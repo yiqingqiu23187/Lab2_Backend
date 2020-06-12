@@ -78,7 +78,7 @@ public class AuthorService {
         //store paper
 //        //Notice!!!!
        //String pathName = "/usr/local/paper/"+conferenceFullname+"/";//you should use this line if the backend runs on dcloud
-       String pathName = "C:/Users/15498/Desktop/test/"+conferenceFullname+"/";//you should use this line and choose a path if the backend runs locally
+       String pathName = "C:/Users/LENOVO/Desktop/test/"+conferenceFullname+"/";//you should use this line and choose a path if the backend runs locally
 
         File temp = new File(pathName);
         if (!temp.exists()){

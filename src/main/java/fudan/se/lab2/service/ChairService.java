@@ -85,11 +85,11 @@ public class ChairService {
         }
     }
 
-    public Conference openMark(String conferenceFullname, Boolean markable, String strategy) {
-        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
-        conference.setMarkable(markable);
-        conference.setOpenOrNot(false);
-        conferenceRepository.save(conference);
+    public OpenMarkResponse openMark(String conferenceFullname, Boolean markable, String strategy) {
+        OpenMarkResponse response = new OpenMarkResponse();
+        response.setSuccess(true);
+
+
 
         ArrayList<String> pcmembers = conferenceRepository.findByFullName(conferenceFullname).getPCMembers();
         ArrayList<Paper> papers = new ArrayList<>();
@@ -100,18 +100,51 @@ public class ChairService {
         int pcsize = pcmembers.size();
         int papersize = papers.size();
 
+        for (Paper paper:papers){
+            int temppcsize = pcsize;
+            for (String pcmember:pcmembers){
+                if (paper.getUsername().equals(pcmember) || (paper.getWriterName().contains(pcmember))){
+                    temppcsize--;
+                    break;
+                }
+            }
+            if (temppcsize<3){
+                response.setSuccess(false);
+                return response;
+            }
+        }
 
+        Conference conference = conferenceRepository.findByFullName(conferenceFullname);
+        conference.setMarkable(markable);
+        conference.setOpenOrNot(false);
+        conferenceRepository.save(conference);
 
         if (strategy.equals("0")) {
             for (int i = 0; i < papersize; i++) {
                 //generate Mark for each paper
+                Paper paper = papers.get(i);
+                ArrayList<String> newpc = new ArrayList<>();
+                int newpcsize = pcsize;
+                for (String pcmember:pcmembers){
+                    if (paper.getUsername().equals(pcmember) || (paper.getWriterName().contains(pcmember))){
+                        newpcsize--;
+                    }else  newpc.add(pcmember);
+                }
+                System.out.println(newpcsize);
+                for (String e:newpc){
+                    System.out.println(e);
+                }
+
                 String title = papers.get(i).getTitle();
                 Mark mark = new Mark();
                 mark.setPaperTitle(title);
                 mark.setConferenceFullname(conferenceFullname);
+
+
                 for (int j = 0; j < 3; j++) {
-                    Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(pcmembers.get((3*i+j)%pcsize),conferenceFullname);
-                    mark.getPcmembers().add(pcmembers.get((3*i+j)%pcsize));
+
+                    Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(newpc.get((3*i+j)%newpcsize),conferenceFullname);
+                    mark.getPcmembers().add(newpc.get((3*i+j)%newpcsize));
                     mark.getFinish().add(0);
                     mark.getScores().add(0);
                     mark.getConfidences().add(0);
@@ -128,11 +161,21 @@ public class ChairService {
 
         else if (strategy.equals("1")){
             for (int i = 0; i < papersize; i++) {
-                String title = papers.get(i).getTitle();
-                ArrayList<String> topics = papers.get(i).getTopics();
+                Paper paper = papers.get(i);
+                ArrayList<String> newpc = new ArrayList<>();
+                int newpcsize = pcsize;
+                for (String pcmember:pcmembers){
+                    if (paper.getUsername().equals(pcmember) || (paper.getWriterName().contains(pcmember))){
+                        newpcsize--;
+                    }else
+                    newpc.add(pcmember);
+                }
+
+                String title = paper.getTitle();
+                ArrayList<String> topics = paper.getTopics();
                 ArrayList<String> tempPC = new ArrayList<>();
                 //find all pcmembers for a specific paper
-                for (String pcmember:pcmembers){
+                for (String pcmember:newpc){
                     Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(pcmember,conferenceFullname);
                     for (String e:topics){
                         if (distribution.getTopics().contains(e)){
@@ -149,8 +192,8 @@ public class ChairService {
 
                 if (tempPC.size()<3){
                     for (int j = 0; j < 3; j++) {
-                        Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(pcmembers.get((3*i+j)%pcsize),conferenceFullname);
-                        mark.getPcmembers().add(pcmembers.get((3*i+j)%pcsize));
+                        Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(newpc.get((3*i+j)%newpcsize),conferenceFullname);
+                        mark.getPcmembers().add(newpc.get((3*i+j)%newpcsize));
                         mark.getFinish().add(0);
                         mark.getScores().add(0);
                         mark.getConfidences().add(0);
@@ -162,10 +205,10 @@ public class ChairService {
                         distributionRepository.save(distribution);
                     }
                 }else {
-                    int start = (int)(Math.random()*pcsize);
+                    int start = (int)(Math.random()*tempPC.size());
                     for (int j = 0; j < 3; j++) {
-                        Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(tempPC.get((start+j)%pcsize),conferenceFullname);
-                        mark.getPcmembers().add(tempPC.get((start+j)%pcsize));
+                        Distribution distribution = distributionRepository.findByUsernameAndConferenceFullname(tempPC.get((start+j)%tempPC.size()),conferenceFullname);
+                        mark.getPcmembers().add(tempPC.get((start+j)%tempPC.size()));
                         mark.getFinish().add(0);
                         mark.getScores().add(0);
                         mark.getConfidences().add(0);
@@ -180,7 +223,7 @@ public class ChairService {
 
             }
         }
-        return conference;
+        return response;
     }
 
     public Conference releaseMark(String conferenceFullname){
