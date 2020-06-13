@@ -21,7 +21,7 @@ class ConferenceRepositoryTest {
         conference.setAbbr("1");
         conference.setState(0);
         conference.setReleased(false);
-        conference.setFinish(false);
+        conference.setFinish(0);
         conference.setMarkable(false);
         conference.setOpenOrNot(false);
         conference.setChair("hzh1");

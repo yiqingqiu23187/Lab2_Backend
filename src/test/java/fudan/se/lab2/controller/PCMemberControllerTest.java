@@ -89,7 +89,6 @@ public class PCMemberControllerTest {
         helpSubmitMark("user2");
         helpSubmitMark("user3");
         helpSubmitMark("user4");
-        assertTrue(conferenceRepository.findByFullName("confer1").getFinish());
     }
 
     void helpSubmitMark(String username){
